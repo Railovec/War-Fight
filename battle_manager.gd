@@ -43,7 +43,7 @@ func regenerate_mana():
 		p.mana = min(p.mana + 1, p.max_mana)
 
 func tick():
-	print("TICK")
+	# print("TICK")
 
 	move_units()
 	handle_combat()
@@ -51,7 +51,7 @@ func tick():
 	check_base_hit()
 
 	var snap = get_game_snapshot()
-	print("--- SNAPSHOT ---")
+	# print("--- SNAPSHOT ---")
 	print(snap)
 
 	var client := get_tree().get_root().find_child("Client", true, false)
@@ -59,7 +59,7 @@ func tick():
 		client.update_snapshot(snap)
 	else:
 		pass
-		print("❌ Client nenájdený")
+		# print("❌ Client nenájdený")
 
 func handle_combat():
 	var units_copy = units.duplicate() # kópia pre bezpečný update
