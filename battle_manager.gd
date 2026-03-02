@@ -18,10 +18,11 @@ func _ready() -> void:
 	start_tick_loop()
 	start_mana_loop()
 	
-	await get_tree().create_timer(8.5).timeout
-	play_card(2, "spawn_vojak")
-	await get_tree().create_timer(2).timeout
-	play_card(1, "spawn_vojak_rychly")
+	# testy
+	# await get_tree().create_timer(8.5).timeout
+	# play_card(2, "spawn_vojak")
+	# await get_tree().create_timer(2).timeout
+	# play_card(1, "spawn_vojak_rychly")
 	
 	
 	
@@ -74,10 +75,22 @@ func handle_combat():
 
 
 func get_target(attacker: Unit) -> Unit:
+	var best_target: Unit = null
+	var best_distance := INF
+
 	for u in units:
-		if u.owner_id != attacker.owner_id:
-			return u
-	return null
+		# ignoruj vlastných
+		if u.owner_id == attacker.owner_id:
+			continue
+
+		var distance = abs(u.position - attacker.position)
+
+		# vyber najbližšieho
+		if distance < best_distance:
+			best_distance = distance
+			best_target = u
+
+	return best_target
 
 func cleanup_dead_units():
 	units = units.filter(func(u): return u.is_alive())
@@ -139,9 +152,9 @@ func spawn_unit(owner_id: int, card):
 	next_spawn_id += 1
 
 	if owner_id == 1:
-		u.position = 0
+		u.position = 150
 	else:
-		u.position = 100
+		u.position = 1002
 
 	u.speed = card.speed   
 
@@ -180,8 +193,8 @@ func init_players():
 		"mana": 0,
 		"max_mana": 10
 	}
-	bases[1] = 0      # Player 1 base na 0
-	bases[2] = 100    # Player 2 base na 100
+	bases[1] = 150      # Player 1 base na 0
+	bases[2] = 1002    # Player 2 base na 100
 	bases_hp[1] = 100
 	bases_hp[2] = 100   
 
@@ -226,3 +239,8 @@ func get_game_snapshot() -> Dictionary:
 		snapshot["players"]["base_hp_%d" % id] = bases_hp[id]
 
 	return snapshot
+
+
+func client_play_card(player_id: int, card_id: String):
+	print("📥 CLIENT REQUEST:", player_id, card_id)
+	play_card(player_id, card_id)

@@ -13,3 +13,29 @@ script = ExtResource("1_0xm2m")
 script = ExtResource("2_h2yge")
 
 [node name="Client" parent="." instance=ExtResource("1_ig7tw")]
+
+[node name="rýchly vojak" type="Button" parent="Client"]
+offset_left = 38.0
+offset_top = 478.0
+offset_right = 289.0
+offset_bottom = 625.0
+text = "rýchly vojak"
+
+[node name="vojak" type="Button" parent="Client"]
+offset_left = 435.0
+offset_top = 479.0
+offset_right = 686.0
+offset_bottom = 626.0
+text = "Normalka"
+
+[node name="CheckButton" type="CheckButton" parent="Client"]
+offset_left = 811.0
+offset_top = 511.0
+offset_right = 962.0
+offset_bottom = 579.0
+text = "vypnute = 1
+zapnuté = 2"
+
+[connection signal="pressed" from="Client/rýchly vojak" to="Client" method="_on_rýchly_vojak_pressed"]
+[connection signal="pressed" from="Client/vojak" to="Client" method="_on_vojak_pressed"]
+[connection signal="toggled" from="Client/CheckButton" to="Client" method="_on_check_button_toggled"]

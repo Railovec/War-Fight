@@ -11,7 +11,7 @@ func register_cards():
 	
 	var vojak = Card.new()
 	vojak.id = "spawn_vojak"  #toto bude chodiť z klienta pre spawn
-	vojak.cost = 8
+	vojak.cost = 6
 	vojak.type = "spawn"
 	vojak.unit_type = "vojak"
 	vojak.speed = 1
@@ -20,7 +20,7 @@ func register_cards():
 	
 	var vojak_rychly = Card.new()
 	vojak_rychly.id = "spawn_vojak_rychly" #toto bude chodiť z klienta pre spawn
-	vojak_rychly.cost = 10
+	vojak_rychly.cost = 9
 	vojak_rychly.type = "spawn"
 	vojak_rychly.unit_type = "vojak_rychly"
 	vojak_rychly.speed = 4
