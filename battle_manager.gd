@@ -49,6 +49,8 @@ func tick():
 	handle_combat()
 	cleanup_dead_units()
 	check_base_hit()
+	
+	
 
 	var snap = get_game_snapshot()
 	# print("--- SNAPSHOT ---")
@@ -210,8 +212,12 @@ func check_base_hit():
 			
 		if bases_hp[1] <= 0:
 			print_rich("[color=green]HRÁČ Č 2 VYHRAL [/color]")
+			await get_tree().create_timer(TICK_RATE).timeout
+			get_tree().quit()
 		elif bases_hp[2] <= 0:
 			print_rich("[color=green]HRÁČ Č 1 VYHRAL [/color]")
+			await get_tree().create_timer(0.5).timeout
+			get_tree().quit()
 
 
 func get_game_snapshot() -> Dictionary:

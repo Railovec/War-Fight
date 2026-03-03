@@ -16,6 +16,13 @@ func _ready():
 		set_process(false)
 	else:
 		print("✅ SERVER BEŽÍ NA PORTE", PORT)
+	
+	# Pridaj toto do _ready() v serverovom scripte
+	var broadcast_timer := Timer.new()
+	broadcast_timer.wait_time = 0.2 # Rovnaký čas ako TICK_RATE
+	broadcast_timer.autostart = true
+	broadcast_timer.timeout.connect(broadcast_snapshot)
+	add_child(broadcast_timer)
 
 
 func _process(_delta):
