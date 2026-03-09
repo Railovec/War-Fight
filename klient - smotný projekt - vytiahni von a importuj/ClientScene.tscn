@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3by7mlbtpect"]
+
+[ext_resource type="Script" uid="uid://ccv27hd7anqwx" path="res://client_scene.gd" id="1_uws14"]
+
+[node name="Client" type="Node2D"]
+script = ExtResource("1_uws14")
+
+[node name="rýchly vojak" type="Button" parent="."]
+offset_left = 121.0
+offset_top = 529.0
+offset_right = 287.0
+offset_bottom = 615.0
+text = "rýchly vojak"
+
+[node name="vojak" type="Button" parent="."]
+offset_left = 438.0
+offset_top = 525.0
+offset_right = 668.0
+offset_bottom = 612.0
+text = "Normalka"
+
+[node name="CheckButton" type="CheckButton" parent="."]
+offset_left = 885.0
+offset_top = 518.0
+offset_right = 1114.0
+offset_bottom = 605.0
+text = "vypnute = 1
+zapnuté = 2"
+
+[connection signal="pressed" from="rýchly vojak" to="." method="_on_rýchly_vojak_pressed"]
+[connection signal="pressed" from="vojak" to="." method="_on_vojak_pressed"]
+[connection signal="toggled" from="CheckButton" to="." method="_on_check_button_toggled"]
