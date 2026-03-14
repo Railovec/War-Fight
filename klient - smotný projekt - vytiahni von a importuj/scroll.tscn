@@ -1,0 +1,606 @@
+[gd_scene load_steps=4 format=3 uid="uid://ds3o2yvj2qtgi"]
+
+[ext_resource type="Script" uid="uid://couce7812ux7d" path="res://tlacitkopredeck.gd" id="1_xwqay"]
+[ext_resource type="PackedScene" uid="uid://bnaquye15h8o4" path="res://pravyeqiup.tscn" id="2_hmjxn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3fd8"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 148.0
+offset_right = 1686.0
+offset_bottom = 1052.0
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 7
+
+[node name="Button" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+script = ExtResource("1_xwqay")
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button2" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button3" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button4" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button5" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button6" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button7" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button8" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button9" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button9"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button10" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button10"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button11" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button11"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button12" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button12"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button13" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button13"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button14" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button14"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button15" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button15"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button16" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button16"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button17" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button17"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button18" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button18"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button19" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button19"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button20" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button20"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button21" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button21"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button22" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button22"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button23" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button23"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button24" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button24"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button25" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button25"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button26" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button26"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button27" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button27"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button28" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button28"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button29" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button29"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button30" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button30"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button31" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button31"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button32" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button32"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button33" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button33"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button34" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button34"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button35" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button35"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button36" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button36"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button37" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button37"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button38" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button38"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button39" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button39"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button40" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button40"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button41" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button41"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button42" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button42"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button43" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button43"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button44" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button44"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button45" type="Button" parent="ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(189, 189)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button45"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(944, 536)
+zoom = Vector2(0.6, 0.6)
+
+[node name="Node2D" parent="." instance=ExtResource("2_hmjxn")]
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 12.0
+offset_right = 1234.0
+offset_bottom = 130.0
+theme_override_font_sizes/font_size = 80
+text = "vyhladavanie"
+
+[node name="Panel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 224.0
+offset_top = 17.0
+offset_right = 1658.0
+offset_bottom = 1075.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k3fd8")
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1261.0
+offset_top = 23.0
+offset_right = 1535.0
+offset_bottom = 133.0
+text = "back"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button" to="ScrollContainer/GridContainer/Button" method="_on_pressed"]
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
+[connection signal="pressed" from="Button2" to="ScrollContainer/GridContainer" method="_on_button_2_pressed"]
+[connection signal="timeout" from="Timer" to="ScrollContainer/GridContainer/Button" method="_on_timer_timeout"]
