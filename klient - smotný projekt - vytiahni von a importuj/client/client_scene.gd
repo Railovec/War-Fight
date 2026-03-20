@@ -1,6 +1,7 @@
 extends Node2D
 
-@export var websocket_url := "ws://localhost:9080"
+@export var websocket_url := "ws://warfight-server.onrender.com"
+# @export var websocket_url := "ws://localhost:9080"
 
 @onready var btn_vojak = get_node_or_null("vojak")
 @onready var btn_rychly = get_node_or_null("rýchly vojak")
@@ -8,6 +9,7 @@ extends Node2D
 var socket := WebSocketPeer.new()
 var last_snapshot: Dictionary = {}
 var hrac: int = 1
+var game_started := false
 
 func _ready():
 	var heartbeat_timer = Timer.new()
@@ -20,7 +22,7 @@ func _ready():
 	add_child(heartbeat_timer)
 	socket.set_no_delay(true)
 	print("🚀 Štartujem klienta...")
-	var err := socket.connect_to_url(websocket_url)
+	var err := socket.connect_to_url(websocket_url, TLSOptions.client_unsafe())
 	if err != OK:
 		print("❌ Chyba pripojenia na server")
 		set_process(false)
@@ -32,6 +34,7 @@ func _ready():
 	add_child(refresh_timer)
 	socket.inbound_buffer_size = 65536 * 2
 	socket.outbound_buffer_size = 65536
+	
 
 func _process(_delta):
 	socket.poll()
@@ -68,8 +71,22 @@ func _on_message(text: String):
 	if data == null or typeof(data) != TYPE_DICTIONARY:
 		return
 
-	# Reagujeme na snapshot (tu sa deje pohyb)
-	if data.get("type") == "snapshot":
+	var type = data.get("type", "")
+
+	# server pridelí hráča
+	if type == "player_id":
+		hrac = int(data.get("id", 1))
+		print("🎮 Som hráč:", hrac)
+		client_ready()
+
+
+	# server spustí hru
+	elif type == "game_start":
+		print("🚀 Hra začala!")
+		game_started = true
+
+	# snapshot hry
+	elif type == "snapshot":
 		var snapshot_data = data.get("data", {})
 		update_snapshot(snapshot_data)
 
@@ -128,11 +145,14 @@ func request_play_card(card_id: String):
 	if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 		var msg := {
 			"type": "play_card",
-			"player": hrac,
 			"card": card_id
 		}
 		socket.send_text(JSON.stringify(msg))
 		print("📤 Poslaná karta: ", card_id)
+	
+	
+	if not game_started:
+		return
 
 func _on_vojak_pressed():
 	request_play_card("spawn_vojak")
@@ -140,6 +160,9 @@ func _on_vojak_pressed():
 func _on_rýchly_vojak_pressed():
 	request_play_card("spawn_vojak_rychly")
 
-func _on_check_button_toggled(toggled_on: bool):
-	hrac = 2 if toggled_on else 1
-	print("👤 Prepnutý na hráča: ", hrac)	
+# func _on_ready_pressed():
+func client_ready():
+		socket.send_text(JSON.stringify({
+		"type": "start_game"
+		}))
+		print("📤 Posielam READY na server")
