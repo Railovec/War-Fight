@@ -5,8 +5,6 @@
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 script = ExtResource("1_0u2jw")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -194,7 +192,6 @@ offset_left = 1572.0
 offset_top = 816.0
 offset_right = 2120.0
 offset_bottom = 972.0
-text = "upgrade,mozno bz bolo tu dat na vyber nemecko,os..."
 
 [node name="Button2" type="Button" parent="."]
 layout_mode = 0
