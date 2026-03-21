@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var websocket_url := "ws://warfight-server.onrender.com"
-# @export var websocket_url := "ws://localhost:9080"
+# @export var websocket_url := "ws://warfight-server.onrender.com"
+@export var websocket_url := "ws://localhost:9080"
 
 @onready var btn_vojak = get_node_or_null("vojak")
 @onready var btn_rychly = get_node_or_null("rýchly vojak")
@@ -10,6 +10,9 @@ var socket := WebSocketPeer.new()
 var last_snapshot: Dictionary = {}
 var hrac: int = 1
 var game_started := false
+var supabase_updating := false
+var opponent_name: String = ""
+var opponent_trophies: int = 0
 
 func _ready():
 	var heartbeat_timer = Timer.new()
@@ -26,6 +29,8 @@ func _ready():
 	if err != OK:
 		print("❌ Chyba pripojenia na server")
 		set_process(false)
+	# else:
+		# print("✅ Socket connect_to_url OK, čakám na STATE_OPEN...")
 		
 	var refresh_timer = Timer.new()
 	refresh_timer.wait_time = 0.1
@@ -36,59 +41,72 @@ func _ready():
 	socket.outbound_buffer_size = 65536
 	
 
+var match_requested := false  # pridaj túto premennú hore
+
 func _process(_delta):
 	socket.poll()
-	# DOPLNENÝ RIADOK: Force-flush alebo overenie stavu
-	if socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING or socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
-		# Tento príkaz prinúti engine skontrolovať buffer
-		var _unused = socket.get_available_packet_count()
 
 	var state := socket.get_ready_state()
+	
 
 	if state == WebSocketPeer.STATE_OPEN:
+		if not match_requested:
+			match_requested = true
+			print("📤 Posielam find_match...")
+			client_ready()
+
 		var has_new_data = false
-		
-		# Spracujeme VŠETKY čakajúce správy v tomto snímku
 		while socket.get_available_packet_count() > 0:
 			var packet := socket.get_packet()
 			if socket.was_string_packet():
 				_on_message(packet.get_string_from_utf8())
 				has_new_data = true
-		
-		# Ak prišli akékoľvek nové dáta, okamžite prekreslíme obrazovku
+
 		if has_new_data:
 			queue_redraw()
-	
+
 	elif state == WebSocketPeer.STATE_CLOSED:
 		var code = socket.get_close_code()
 		var reason = socket.get_close_reason()
 		print("⚠️ Spojenie prerušené. Kód: %d, Dôvod: %s" % [code, reason])
-		set_process(false)
+		if not supabase_updating:
+			set_process(false)
 
 func _on_message(text: String):
-	# Tu spracujeme JSON zo servera
+	# print("📩 Správa zo servera: ", text)
 	var data = JSON.parse_string(text)
 	if data == null or typeof(data) != TYPE_DICTIONARY:
 		return
-
 	var type = data.get("type", "")
 
-	# server pridelí hráča
 	if type == "player_id":
 		hrac = int(data.get("id", 1))
-		print("🎮 Som hráč:", hrac)
-		client_ready()
+		opponent_name = data.get("opponent", "Súper")
+		opponent_trophies = int(data.get("opponent_trophies", 0))
+		print("🎮 Som hráč: ", hrac, " | Súper: ", opponent_name)
 
+	elif type == "waiting":
+		print("⏳ Čakám na súpera...")
 
-	# server spustí hru
 	elif type == "game_start":
 		print("🚀 Hra začala!")
 		game_started = true
 
-	# snapshot hry
 	elif type == "snapshot":
 		var snapshot_data = data.get("data", {})
 		update_snapshot(snapshot_data)
+
+	elif type == "game_over":
+		supabase_updating = true
+		var won: bool = data.get("won", false)
+		game_started = false
+		if won:
+			print("🏆 Vyhral si! +30 trofejí")
+		else:
+			print("💀 Prehral si! -20 trofejí")
+		await Supabase.update_after_match(Global.player_db_id, won)
+		supabase_updating = false
+		print("✅ Trofeje aktualizované!")
 
 func update_snapshot(snapshot: Dictionary):
 	last_snapshot = snapshot
@@ -105,7 +123,7 @@ func update_snapshot(snapshot: Dictionary):
 		# if btn_vojak: btn_vojak.disabled = (mana < 6)
 		
 		
-	print("Nové dáta prijaté! Počet jednotiek: ", snapshot.get("units", []).size())
+	# print("Nové dáta prijaté! Počet jednotiek: ", snapshot.get("units", []).size())
 	last_snapshot = snapshot
 	# VYNÚTIME prekreslenie (zavolá _draw)
 	queue_redraw()
@@ -162,7 +180,9 @@ func _on_rýchly_vojak_pressed():
 
 # func _on_ready_pressed():
 func client_ready():
-		socket.send_text(JSON.stringify({
-		"type": "start_game"
-		}))
-		print("📤 Posielam READY na server")
+	socket.send_text(JSON.stringify({
+		"type": "find_match",
+		"username": Global.username,
+		"trophies": Global.trophies
+	}))
+	print("📤 Hľadám súpera... Trofeje: ", Global.trophies)

@@ -34,10 +34,10 @@ offset_bottom = 520.0
 text = "quit"
 
 [node name="Button7" type="Button" parent="."]
-offset_left = 475.0
-offset_top = 13.0
-offset_right = 1083.0
-offset_bottom = 546.0
+offset_left = 438.0
+offset_top = 45.0
+offset_right = 1046.0
+offset_bottom = 578.0
 text = "trophy ukazka"
 
 [node name="LineEdit" type="LineEdit" parent="."]
@@ -46,6 +46,12 @@ offset_left = 146.0
 offset_top = 144.0
 offset_right = 813.0
 offset_bottom = 291.0
+
+[node name="TrophyLabel" type="Label" parent="."]
+offset_left = 1076.0
+offset_top = 14.0
+offset_right = 1138.0
+offset_bottom = 62.0
 
 [connection signal="pressed" from="play" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="upgrade" to="." method="_on_upgrade_pressed"]

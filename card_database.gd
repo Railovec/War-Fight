@@ -27,6 +27,13 @@ func register_cards():
 	
 	cards[vojak_rychly.id] = vojak_rychly
 	
+	var velitel = Card.new()
+	velitel.id = "spawn_velitel"
+	velitel.cost = 8
+	velitel.type = "spawn"
+	velitel.unit_type = "velitel"
+	velitel.speed = 0.5  # pomalý, support rola
+	cards[velitel.id] = velitel
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
