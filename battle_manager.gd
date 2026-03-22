@@ -1,21 +1,26 @@
 extends Node
 
-
 var units: Array = []
+var barricades: Array = []
+
 const TICK_RATE := 0.2
 const MANA_RATE := 1
-const ATTACK_RANGE := 1.5
+const DEFAULT_MELEE_RANGE := 1.5
 var game_started := false
+var next_spawn_id: int = 1
+var bases := {}
+var players := {}
+var bases_hp := {}
+var projectiles: Array = []  # aktívne projektily
+var next_projectile_id: int = 1
 
 
 func _ready() -> void:
-	# ✅ Len jeden timer — odstránený duplicitný start_tick_loop()
 	var t := Timer.new()
 	t.wait_time = TICK_RATE
 	t.autostart = true
 	t.timeout.connect(tick)
 	add_child(t)
-
 	init_players()
 	start_mana_loop()
 
@@ -23,13 +28,9 @@ func _ready() -> void:
 func start_mana_loop():
 	while true:
 		await get_tree().create_timer(MANA_RATE).timeout
-
 		if not game_started:
 			continue
-
 		regenerate_mana()
-		for id in players.keys():
-			print("Player ", id, " mana: ", players[id].mana)
 
 
 func regenerate_mana():
@@ -40,233 +41,424 @@ func regenerate_mana():
 func tick():
 	if not game_started:
 		return
-	apply_buffs()         # ✅ Vždy ako prvé
+	apply_buffs()
+	apply_formation_bonuses()
+	tick_slow_timers()
+	tick_healers()
+	tick_engineer_barricades()
 	move_units()
-	handle_combat()
+	handle_combat()        
+	tick_projectiles()     
 	cleanup_dead_units()
 	check_base_hit()
-
 	var snap = get_game_snapshot()
-	print(snap)
-
 	var client := get_tree().get_root().find_child("Client", true, false)
 	if client:
 		client.update_snapshot(snap)
 
 
+# ══════════════════════════════════════════
+# BUFFY
+# ══════════════════════════════════════════
+
 func apply_buffs():
-	# Reset všetkých jednotiek na ich base hodnoty
 	for u in units:
 		u.attack_speed = u.base_attack_speed
-
-	# Aplikuj buffy od živých support jednotiek
 	for buffer in units:
 		if not buffer.is_support:
 			continue
-		# ✅ Opravené odsadenie — tento loop teraz skutočne beží
 		for u in units:
 			if u.owner_id == buffer.owner_id and u != buffer:
 				u.attack_speed = u.attack_speed * (1.0 - buffer.attack_speed_buff)
 
 
-func handle_combat():
-	for attacker in units:
-
-		attacker.attack_cooldown = max(0, attacker.attack_cooldown - TICK_RATE)
-
-		var target = get_target(attacker)
-		if target == null:
-			continue
-
-		if abs(attacker.position - target.position) <= ATTACK_RANGE:
-
-			if attacker.attack_cooldown > 0:
-				continue
-
-			target.hp -= attacker.damage
-			attacker.attack_cooldown = attacker.attack_speed
-			print("Unit ID:", attacker.spawn_id, " owner: ", attacker.owner_id, " útočí na: ", target.spawn_id, " owner: ", target.owner_id, " so silou: ", attacker.damage, " -> target HP: ", target.hp)
-
-
-func get_target(attacker: Unit) -> Unit:
-	var best_target: Unit = null
-	var best_distance := INF
-
+func apply_formation_bonuses():
 	for u in units:
-		if u.owner_id == attacker.owner_id:
+		if not u.formation_bonus:
 			continue
+		var allies_nearby := 0
+		for other in units:
+			if other == u or other.owner_id != u.owner_id or not other.formation_bonus:
+				continue
+			if abs(other.position - u.position) <= u.formation_range:
+				allies_nearby += 1
+		var should_be_active := allies_nearby >= 1
+		if should_be_active and not u.formation_active:
+			u.formation_active = true
+			u.max_hp = int(float(u.max_hp) * (1.0 + u.formation_hp_bonus))
+			u.hp = min(u.hp + int(float(u.max_hp) * u.formation_hp_bonus), u.max_hp)
+		elif not should_be_active and u.formation_active:
+			u.formation_active = false
+			u.max_hp = int(float(u.max_hp) / (1.0 + u.formation_hp_bonus))
+			u.hp = min(u.hp, u.max_hp)
 
-		var distance = abs(u.position - attacker.position)
 
-		if distance < best_distance:
-			best_distance = distance
-			best_target = u
+func tick_slow_timers():
+	for u in units:
+		if u.slow_timer <= 0.0:
+			continue
+		u.slow_timer = max(0.0, u.slow_timer - TICK_RATE)
+		if u.slow_timer <= 0.0 and u.base_speed > 0.0:
+			u.speed = u.base_speed
 
-	return best_target
+
+func tick_healers():
+	for u in units:
+		if not u.is_healer:
+			continue
+		u.heal_cooldown = max(0.0, u.heal_cooldown - TICK_RATE)
+		if u.heal_cooldown > 0.0:
+			continue
+		var target := _get_lowest_hp_ally(u)
+		if target != null:
+			target.hp = min(target.hp + u.heal_amount, target.max_hp)
+			u.heal_cooldown = u.attack_speed
+			print("💚 Healer ", u.spawn_id, " lieči ", target.spawn_id, " +", u.heal_amount, " HP")
 
 
-func cleanup_dead_units():
-	units = units.filter(func(u): return u.is_alive())
+func _get_lowest_hp_ally(healer: Unit) -> Unit:
+	var best: Unit = null
+	var lowest := INF
+	for u in units:
+		if u.owner_id != healer.owner_id or u == healer:
+			continue
+		if u.hp < u.max_hp and float(u.hp) < lowest:
+			lowest = float(u.hp)
+			best = u
+	return best
 
+
+func tick_engineer_barricades():
+	for u in units:
+		if not u.has_meta("unit_type") or u.get_meta("unit_type") != "inzinier":
+			continue
+		u.attack_cooldown = max(0.0, u.attack_cooldown - TICK_RATE)
+		if u.attack_cooldown <= 0.0:
+			_spawn_barricade(u)
+			u.attack_cooldown = 3.0
+
+
+func _spawn_barricade(engineer: Unit):
+	var offset := 10.0 if engineer.owner_id == 1 else -10.0
+	barricades.append({
+		"owner_id": engineer.owner_id,
+		"hp": 80,
+		"position": engineer.position + offset
+	})
+	print("🧱 Barikáda spawnutá na ", engineer.position + offset)
+
+
+# ══════════════════════════════════════════
+# POHYB
+# ══════════════════════════════════════════
 
 func move_units():
 	for u in units:
-		var enemy = get_target(u)
-
-		var destination: float
-		if enemy != null:
-			destination = enemy.position
-		else:
-			if u.owner_id == 1:
-				destination = bases[2]
-			else:
-				destination = bases[1]
-
-		if abs(u.position - destination) <= ATTACK_RANGE:
+		if u.is_ranged or u.is_healer:
 			continue
-
-		if destination > u.position:
-			u.position += u.speed
+		if u.ignore_units:
+			_step_toward(u, float(bases[2]) if u.owner_id == 1 else float(bases[1]))
+			continue
+		var target := get_target(u)
+		var destination: float
+		if target != null:
+			destination = target.position
 		else:
-			u.position -= u.speed
+			destination = float(bases[2]) if u.owner_id == 1 else float(bases[1])
+		if abs(u.position - destination) <= u.attack_range and not u.move_while_attacking:
+			continue
+		_step_toward(u, destination)
 
 
-func play_card(player_id: int, card_id: String):
-	var card = get_node("../CardDatabase").cards.get(card_id)
-	if card == null:
-		print("Neznáma karta")
-		return
-
-	var player = players.get(player_id)
-	if player == null:
-		print("Neznámy hráč")
-		return
-
-	if player.mana < card.cost:
-		print("Hráč ", player_id, " nemá dosť many")
-		return
-
-	player.mana -= card.cost
-
-	if card.type == "spawn":
-		spawn_unit(player_id, card)
-
-	print("Hráč ", player_id, " zahral kartu ", card_id, " mana: ", player.mana)
-
-
-var next_spawn_id: int = 1
-
-
-func spawn_unit(owner_id: int, card):
-	var u = Unit.new()
-	u.owner_id = owner_id
-	u.spawn_id = next_spawn_id
-	next_spawn_id += 1
-
-	if owner_id == 1:
-		u.position = 150
+func _step_toward(u: Unit, dest: float):
+	if dest > u.position:
+		u.position += u.speed
 	else:
-		u.position = 1002
-
-	u.speed = card.speed
-
-	if card.unit_type == "vojak":
-		u.hp = 100
-		u.damage = 10
-		u.attack_speed = 1.0
-
-	if card.unit_type == "vojak_rychly":
-		u.hp = 100
-		u.damage = 5
-		u.attack_speed = 0.5
-
-	if card.unit_type == "velitel":
-		u.hp = 80
-		u.damage = 3
-		u.attack_speed = 1.5
-		u.is_support = true
-		u.attack_speed_buff = 0.4
-
-	# ✅ Vždy uložiť base_attack_speed — pre všetky typy jednotiek
-	u.base_attack_speed = u.attack_speed
-
-	units.append(u)
-	print("Spawned: ", card.unit_type, " speed:", u.speed, " for player:", owner_id)
+		u.position -= u.speed
 
 
-var bases := {}
-var players := {}
-var bases_hp := {}
+# ══════════════════════════════════════════
+# BOJ
+# ══════════════════════════════════════════
+
+func handle_combat():
+	for attacker in units:
+		attacker.attack_cooldown = max(0.0, attacker.attack_cooldown - TICK_RATE)
+		if attacker.is_healer:
+			continue
+		if attacker.ignore_units and attacker.has_meta("unit_type") and attacker.get_meta("unit_type") == "trebuchet":
+			if attacker.attack_cooldown <= 0.0:
+				var base_id := 2 if attacker.owner_id == 1 else 1
+				bases_hp[base_id] -= attacker.damage
+				attacker.attack_cooldown = attacker.attack_speed
+				print("🪨 Trebuchet DMG na základňu: ", attacker.damage, " HP: ", bases_hp[base_id])
+			continue
+		var target := get_target(attacker)
+		if target == null:
+			continue
+		if abs(attacker.position - target.position) > attacker.attack_range:
+			continue
+		if attacker.attack_cooldown > 0.0:
+			continue
+		if attacker.is_ranged and attacker.projectile_in_flight:
+			continue
+		_do_attack(attacker, target)
+		attacker.attack_cooldown = attacker.attack_speed
 
 
-func init_players():
-	players[1] = {
-		"mana": 0,
-		"max_mana": 10
-	}
-	players[2] = {
-		"mana": 0,
-		"max_mana": 10
-	}
-	bases[1] = 150
-	bases[2] = 1002
-	bases_hp[1] = 100
-	bases_hp[2] = 100
+func _do_attack(attacker: Unit, primary_target: Unit):
+	if attacker.is_ranged:
+		attacker.projectile_in_flight = true
+		projectiles.append({
+			"id": next_projectile_id,
+			"attacker_id": attacker.spawn_id,
+			"owner": attacker.owner_id,
+			"from_x": attacker.position,
+			"to_x": primary_target.position,
+			"pos": attacker.position,
+			"unit_type": attacker.get_meta("unit_type", "musketier"),
+			"damage": attacker.damage,
+			"target_id": primary_target.spawn_id,
+			"slow": attacker.slow_on_hit
+		})
+		next_projectile_id += 1
+		return
+	# Melee útok
+	if attacker.splash_radius > 0.0:
+		for u in units:
+			if u.owner_id == attacker.owner_id:
+				continue
+			if abs(u.position - primary_target.position) <= attacker.splash_radius:
+				var dealt = u.take_damage(attacker.damage)
+				print("💥 Splash ", dealt, " DMG na unit ", u.spawn_id)
+		for b in barricades:
+			if b.owner_id == attacker.owner_id:
+				continue
+			if abs(b.position - primary_target.position) <= attacker.splash_radius:
+				b.hp -= attacker.damage
+	else:
+		var dealt := primary_target.take_damage(attacker.damage)
+		print("Unit ", attacker.spawn_id, " -> ", primary_target.spawn_id, " DMG: ", dealt, " HP: ", primary_target.hp)
+	if attacker.slow_on_hit > 0.0:
+		primary_target.apply_slow(attacker.slow_on_hit)
+	if attacker.has_meta("unit_type") and attacker.get_meta("unit_type") == "panzer":
+		for u in units:
+			if u.owner_id != attacker.owner_id and abs(u.position - attacker.position) <= 5.0:
+				u.take_damage(20)
 
+
+# ══════════════════════════════════════════
+# TARGETING
+# ══════════════════════════════════════════
+
+func get_target(attacker: Unit) -> Unit:
+	if attacker.ignore_units:
+		return null
+	var candidates: Array = units.filter(func(u): return u.owner_id != attacker.owner_id)
+	if attacker.has_meta("unit_type") and attacker.get_meta("unit_type") == "drak":
+		var far := candidates.filter(func(u): return abs(u.position - attacker.position) > 100.0)
+		if not far.is_empty():
+			candidates = far
+	if candidates.is_empty():
+		return null
+	match attacker.target_mode:
+		Unit.TargetMode.NEAREST:
+			var best: Unit = null
+			var best_dist := INF
+			for u in candidates:
+				var d = abs(u.position - attacker.position)
+				if d < best_dist:
+					best_dist = d; best = u
+			return best
+		Unit.TargetMode.LOWEST_HP:
+			var best: Unit = null
+			var lowest := INF
+			for u in candidates:
+				if float(u.hp) < lowest:
+					lowest = float(u.hp); best = u
+			return best
+		Unit.TargetMode.HIGHEST_HP:
+			var best: Unit = null
+			var highest := -1.0
+			for u in candidates:
+				if float(u.hp) > highest:
+					highest = float(u.hp); best = u
+			return best
+	return null
+
+
+# ══════════════════════════════════════════
+# SMRŤ
+# ══════════════════════════════════════════
+
+func cleanup_dead_units():
+	var dead := units.filter(func(u): return not u.is_alive())
+	for u in dead:
+		if u.death_explosion_radius > 0.0:
+			print("💣 Výbuch unit ", u.spawn_id)
+			for other in units:
+				if other.owner_id != u.owner_id and abs(other.position - u.position) <= u.death_explosion_radius:
+					other.take_damage(u.death_explosion_damage)
+	units = units.filter(func(u): return u.is_alive())
+	barricades = barricades.filter(func(b): return b.hp > 0)
+
+
+# ══════════════════════════════════════════
+# ZÁKLADNE
+# ══════════════════════════════════════════
 
 func check_base_hit():
 	for u in units:
+		if u.ignore_units:
+			continue
 		if u.owner_id == 1 and u.position >= bases[2] - 1:
 			bases_hp[2] -= u.damage
-			print("Player 1 unit ", u.spawn_id, " niči Player 2 base! DAMAGE: ", u.damage, " base HP: ", bases_hp[2])
 		elif u.owner_id == 2 and u.position <= bases[1] + 1:
 			bases_hp[1] -= u.damage
-			print("Player 2 unit ", u.spawn_id, " ničí Player 1 base! DAMAGE: ", u.damage, " base HP: ", bases_hp[1])
-
 	if bases_hp[1] <= 0 and game_started:
-		print_rich("[color=green]HRÁČ Č 2 VYHRAL[/color]")
+		print_rich("[color=green]HRÁČ 2 VYHRAL[/color]")
 		game_started = false
 		await get_tree().create_timer(TICK_RATE).timeout
 		get_parent().game_over(2)
-
 	elif bases_hp[2] <= 0 and game_started:
-		print_rich("[color=green]HRÁČ Č 1 VYHRAL[/color]")
+		print_rich("[color=green]HRÁČ 1 VYHRAL[/color]")
 		game_started = false
 		await get_tree().create_timer(0.5).timeout
 		get_parent().game_over(1)
 
 
-func get_game_snapshot() -> Dictionary:
-	var snapshot := {
-		"units": [],
-		"players": {}
-	}
+# ══════════════════════════════════════════
+# KARTY / SPAWN
+# ══════════════════════════════════════════
 
-	for u in units:
-		snapshot["units"].append({
-			"id": u.spawn_id,
-			"owner": u.owner_id,
-			"hp": u.hp,
-			"pos": u.position,
-			"speed": u.speed,
-			"is_support": u.is_support   # ✅ Klient môže zobraziť ikonu veliteľa
-		})
-
-	for id in players.keys():
-		snapshot["players"][str(id)] = {   # ✅ String kľúče — konzistentné s klientom
-			"mana": players[id].mana,
-			"max_mana": players[id].max_mana
-		}
-
-	for id in bases.keys():
-		snapshot["players"]["base_hp_%d" % id] = bases_hp[id]
-
-	return snapshot
+func play_card(player_id: int, card_id: String):
+	var card = get_node("../CardDatabase").cards.get(card_id)
+	if card == null:
+		print("Neznáma karta: ", card_id); return
+	var player = players.get(player_id)
+	if player == null:
+		return
+	if player.mana < card.cost:
+		print("Málo many"); return
+	player.mana -= card.cost
+	if card.type == "spell":
+		_cast_spell(player_id, card)
+	elif card.unit_type == "vojak_ww2":
+		spawn_unit(player_id, card)
+		spawn_unit(player_id, card)
+	else:
+		spawn_unit(player_id, card)
+	print("Hráč ", player_id, " zahral ", card_id, " | mana: ", player.mana)
 
 
-func client_play_card(player_id: int, card_id: String):
-	print("📥 CLIENT REQUEST:", player_id, card_id)
-	play_card(player_id, card_id)
+func _cast_spell(player_id: int, card):
+	if card.id == "letecky_utok":
+		var enemy_base := float(bases[2]) if player_id == 1 else float(bases[1])
+		var target_pos := enemy_base + randf_range(-200.0, 200.0)
+		print("✈️ Letecký útok na ", target_pos)
+		for u in units:
+			if u.owner_id != player_id and abs(u.position - target_pos) <= 100.0:
+				u.take_damage(45)
+		if abs(enemy_base - target_pos) <= 100.0:
+			var base_id := 2 if player_id == 1 else 1
+			bases_hp[base_id] -= 45
+
+
+func spawn_unit(owner_id: int, card) -> Unit:
+	var u := Unit.new()
+	u.owner_id = owner_id
+	u.spawn_id = next_spawn_id
+	next_spawn_id += 1
+	u.position = float(bases[1]) if owner_id == 1 else float(bases[2])
+	u.speed = card.speed
+	u.base_speed = card.speed
+
+	match card.unit_type:
+		"jaskynny_muz":
+			u.hp = 60; u.max_hp = 60; u.damage = 8; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.set_meta("unit_type", "jaskynny_muz")
+		"lovec":
+			u.hp = 40; u.max_hp = 40; u.damage = 12; u.attack_speed = 1.2
+			u.is_ranged = true; u.attack_range = 80.0
+		"saman":
+			u.hp = 50; u.max_hp = 50; u.damage = 2; u.attack_speed = 1.0
+			u.is_healer = true; u.heal_amount = 5
+		"mamut":
+			u.hp = 250; u.max_hp = 250; u.damage = 20; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.death_explosion_radius = 50.0; u.death_explosion_damage = 30
+		"bronzovy_vojak":
+			u.hp = 90; u.max_hp = 90; u.damage = 12; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"vojnovy_voz":
+			u.hp = 80; u.max_hp = 80; u.damage = 15; u.attack_speed = 0.8; u.attack_range = DEFAULT_MELEE_RANGE
+			u.splash_radius = 15.0
+		"lukostrelec":
+			u.hp = 50; u.max_hp = 50; u.damage = 18; u.attack_speed = 1.5
+			u.is_ranged = true; u.attack_range = 120.0; u.target_mode = Unit.TargetMode.LOWEST_HP
+		"faraon":
+			u.hp = 100; u.max_hp = 100; u.damage = 5; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
+			u.is_support = true; u.attack_speed_buff = 0.4
+		"legionar":
+			u.hp = 120; u.max_hp = 120; u.damage = 14; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.formation_bonus = true
+		"balistar":
+			u.hp = 60; u.max_hp = 60; u.damage = 35; u.attack_speed = 3.0
+			u.attack_range = 60.0; u.splash_radius = 20.0
+		"gladiator":
+			u.hp = 110; u.max_hp = 110; u.damage = 22; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.target_mode = Unit.TargetMode.HIGHEST_HP
+		"saboter":
+			u.hp = 70; u.max_hp = 70; u.damage = 10; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.ignore_units = true
+		"rytier":
+			u.hp = 180; u.max_hp = 180; u.damage = 16; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
+			u.shield_percent = 0.5; u.shield_threshold = 0.5
+		"trebuchet":
+			u.hp = 50; u.max_hp = 50; u.damage = 50; u.attack_speed = 4.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.ignore_units = true; u.set_meta("unit_type", "trebuchet")
+		"mnich":
+			u.hp = 60; u.max_hp = 60; u.damage = 0; u.attack_speed = 1.0
+			u.is_healer = true; u.heal_amount = 15; u.target_mode = Unit.TargetMode.LOWEST_HP
+		"drak":
+			u.hp = 200; u.max_hp = 200; u.damage = 25; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
+			u.set_meta("unit_type", "drak")
+		"musketier":
+			u.hp = 70; u.max_hp = 70; u.damage = 28; u.attack_speed = 2.5
+			u.is_ranged = true; u.attack_range = 700.0; u.attack_cooldown = 0.0
+			u.set_meta("unit_type", "musketier")
+		"parny_tank":
+			u.hp = 350; u.max_hp = 350; u.damage = 30; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
+			u.move_while_attacking = true; u.set_meta("unit_type", "parny_tank")
+		"inzinier":
+			u.hp = 80; u.max_hp = 80; u.damage = 5; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.attack_cooldown = 0.0; u.set_meta("unit_type", "inzinier")
+		"dynamiter":
+			u.hp = 60; u.max_hp = 60; u.damage = 5; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.death_explosion_radius = 60.0; u.death_explosion_damage = 80
+		"vojak_ww2":
+			u.hp = 100; u.max_hp = 100; u.damage = 20; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"panzer":
+			u.hp = 400; u.max_hp = 400; u.damage = 40; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.move_while_attacking = true; u.set_meta("unit_type", "panzer")
+		"odstrelec":
+			u.hp = 55; u.max_hp = 55; u.damage = 60; u.attack_speed = 4.0
+			u.is_ranged = true; u.attack_range = 200.0
+			u.target_mode = Unit.TargetMode.HIGHEST_HP; u.slow_on_hit = 1.0
+
+	u.base_attack_speed = u.attack_speed
+	units.append(u)
+	print("Spawned: ", card.unit_type, " pre hráča ", owner_id)
+	return u
+
+
+# ══════════════════════════════════════════
+# INIT / RESET / SNAPSHOT
+# ══════════════════════════════════════════
+
+func init_players():
+	players[1] = {"mana": 0, "max_mana": 10}
+	players[2] = {"mana": 0, "max_mana": 10}
+	bases[1] = 150; bases[2] = 1002
+	bases_hp[1] = 100; bases_hp[2] = 100
 
 
 func start_game():
@@ -275,9 +467,70 @@ func start_game():
 
 
 func reset_game():
-	print("🔄 BattleManager: reset hry")
-	units.clear()
-	next_spawn_id = 1
-	game_started = false
+	units.clear(); barricades.clear(); projectiles.clear()
+	next_spawn_id = 1; game_started = false
 	init_players()
-	print("✅ BattleManager: pripravený na novú hru")
+	print("✅ BattleManager: reset hotový")
+
+
+func client_play_card(player_id: int, card_id: String):
+	play_card(player_id, card_id)
+
+
+func get_game_snapshot() -> Dictionary:
+	var snapshot := {"units": [], "players": {}, "barricades": []}
+	for u in units:
+		snapshot["units"].append({
+			"id": u.spawn_id,
+			"owner": u.owner_id,
+			"hp": u.hp,
+			"max_hp": u.max_hp,
+			"pos": u.position,
+			"speed": u.speed,
+			"is_support": u.is_support,
+			"is_ranged": u.is_ranged,
+			"just_fired": u.attack_cooldown >= u.base_attack_speed * 0.8,
+			"unit_type": u.get_meta("unit_type", "jaskynny_muz")  
+		})
+	for b in barricades:
+		snapshot["barricades"].append({"owner": b.owner_id, "hp": b.hp, "pos": b.position})
+	for id in players.keys():
+		snapshot["players"][str(id)] = {"mana": players[id].mana, "max_mana": players[id].max_mana}
+	for id in bases.keys():
+		snapshot["players"]["base_hp_%d" % id] = bases_hp[id]
+	snapshot["projectiles"] = projectiles.duplicate(true)
+	return snapshot
+
+
+func tick_projectiles():
+	var speed := 50.0
+	var arrived := []
+	for p in projectiles:
+		if p.to_x > p.pos:
+			p.pos += speed
+		else:
+			p.pos -= speed
+		if abs(p.pos - p.to_x) <= speed:
+			arrived.append(p)
+	for p in arrived:
+		# print("✅ Projektil dorazil ID: ", p.id)
+		var shooter := _find_unit_by_id(int(p.get("attacker_id", -1)))
+		if shooter != null:
+			shooter.projectile_in_flight = false
+			#print("🔓 Reset projectile_in_flight pre shooter: ", shooter.spawn_id)
+		var target := _find_unit_by_id(int(p.target_id))
+		if target != null and target.is_alive():
+			var dealt := target.take_damage(int(p.damage))
+			#print("🎯 Projektil zasiahol unit ", target.spawn_id, " DMG: ", dealt)
+			if p.get("slow", 0.0) > 0.0:
+				target.apply_slow(p.slow)
+	projectiles = projectiles.filter(func(p): return not arrived.has(p))
+	
+	
+func _find_unit_by_id(spawn_id: int) -> Unit:
+	for u in units:
+		if u.spawn_id == spawn_id:
+			return u
+	return null
+	
+	

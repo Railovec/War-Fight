@@ -1,6 +1,5 @@
 extends Node2D
 
-# @export var websocket_url := "ws://warfight-server.onrender.com"
 @export var websocket_url := "ws://localhost:9080"
 
 @onready var btn_vojak = get_node_or_null("vojak")
@@ -10,60 +9,56 @@ var socket := WebSocketPeer.new()
 var last_snapshot: Dictionary = {}
 var hrac: int = 1
 var game_started := false
-var supabase_updating := false
 var opponent_name: String = ""
 var opponent_trophies: int = 0
+var supabase_updating := false
+var match_requested := false
+
+
+var projectile_nodes: Dictionary = {}
+var projectile_scene = preload("res://units/ProjectileNode.tscn")
+
+# Sleduje živé unit nody: spawn_id -> Node2D
+var unit_nodes: Dictionary = {}
+
+# Preload unit scény
+var unit_scene = preload("res://units/UnitNode.tscn")
 
 func _ready():
 	var heartbeat_timer = Timer.new()
-	heartbeat_timer.wait_time = 0.5 # Každú pol sekundu pošle "ping"
+	heartbeat_timer.wait_time = 0.5
 	heartbeat_timer.autostart = true
 	heartbeat_timer.timeout.connect(func():
 		if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 			socket.send_text(JSON.stringify({"type": "ping"}))
 	)
 	add_child(heartbeat_timer)
+
 	socket.set_no_delay(true)
 	print("🚀 Štartujem klienta...")
 	var err := socket.connect_to_url(websocket_url, TLSOptions.client_unsafe())
 	if err != OK:
-		print("❌ Chyba pripojenia na server")
+		print("❌ Chyba pripojenia")
 		set_process(false)
-	# else:
-		# print("✅ Socket connect_to_url OK, čakám na STATE_OPEN...")
-		
-	var refresh_timer = Timer.new()
-	refresh_timer.wait_time = 0.1
-	refresh_timer.autostart = true
-	refresh_timer.timeout.connect(func(): queue_redraw())
-	add_child(refresh_timer)
+
 	socket.inbound_buffer_size = 65536 * 2
 	socket.outbound_buffer_size = 65536
-	
 
-var match_requested := false  # pridaj túto premennú hore
 
 func _process(_delta):
 	socket.poll()
 
 	var state := socket.get_ready_state()
-	
 
 	if state == WebSocketPeer.STATE_OPEN:
 		if not match_requested:
 			match_requested = true
-			print("📤 Posielam find_match...")
 			client_ready()
 
-		var has_new_data = false
 		while socket.get_available_packet_count() > 0:
 			var packet := socket.get_packet()
 			if socket.was_string_packet():
 				_on_message(packet.get_string_from_utf8())
-				has_new_data = true
-
-		if has_new_data:
-			queue_redraw()
 
 	elif state == WebSocketPeer.STATE_CLOSED:
 		var code = socket.get_close_code()
@@ -72,11 +67,12 @@ func _process(_delta):
 		if not supabase_updating:
 			set_process(false)
 
+
 func _on_message(text: String):
-	# print("📩 Správa zo servera: ", text)
 	var data = JSON.parse_string(text)
 	if data == null or typeof(data) != TYPE_DICTIONARY:
 		return
+
 	var type = data.get("type", "")
 
 	if type == "player_id":
@@ -100,85 +96,115 @@ func _on_message(text: String):
 		supabase_updating = true
 		var won: bool = data.get("won", false)
 		game_started = false
-		if won:
-			print("🏆 Vyhral si! +30 trofejí")
-		else:
-			print("💀 Prehral si! -20 trofejí")
+		print("🏆 Vyhral si!" if won else "💀 Prehral si!")
 		await Supabase.update_after_match(Global.player_db_id, won)
 		supabase_updating = false
-		print("✅ Trofeje aktualizované!")
+		set_process(false)
+
 
 func update_snapshot(snapshot: Dictionary):
 	last_snapshot = snapshot
+	var units_data: Array = snapshot.get("units", [])
+	# print("📦 Snapshot — počet jednotiek: ", units_data.size())
+	#for u in units_data:
+		#print("  unit: ", u)
+	var alive_ids := {}
+
+	for u in units_data:
+		var id: int = u.get("id", 0)
+		alive_ids[id] = true
+
+		if not unit_nodes.has(id):
+			_spawn_unit_node(id, u)
+		else:
+			unit_nodes[id].update_from_snapshot(u)
+
+	# Zmaž nody jednotiek ktoré už nie sú v snapshote
+	for id in unit_nodes.keys():
+		if not alive_ids.has(id):
+			_remove_unit_node(id)
 	
-	# Aktualizácia UI (mana) - podľa tvojho formátu, kde kľúče sú čísla
-	var players = snapshot.get("players", {})
-	
-	# Skúsime nájsť dáta nášho hráča (ošetrené pre int aj string kľúče)
-	var my_data = players.get(hrac, players.get(str(hrac), {}))
-	
-	if not my_data.is_empty():
-		var mana = my_data.get("mana", 0)
-		# if btn_rychly: btn_rychly.disabled = (mana < 9)
-		# if btn_vojak: btn_vojak.disabled = (mana < 6)
-		
-		
-	# print("Nové dáta prijaté! Počet jednotiek: ", snapshot.get("units", []).size())
-	last_snapshot = snapshot
-	# VYNÚTIME prekreslenie (zavolá _draw)
+	# Projektily
+	var projectiles_data: Array = snapshot.get("projectiles", [])
+	var alive_proj_ids := {}
+
+	for p in projectiles_data:
+		#print("🎯 Projektil data: ", p)
+		var pid: int = int(p.get("id", 0))
+		#print("PID: ", pid, " má node: ", projectile_nodes.has(pid), " keys: ", projectile_nodes.keys())
+		alive_proj_ids[pid] = true
+		if not projectile_nodes.has(pid):
+			print("🚀 Spawnujem projektil ID: ", pid, " pos: ", p.get("pos", 0.0))
+			var node = projectile_scene.instantiate()
+			add_child(node)
+			projectile_nodes[pid] = node
+			node.setup(p)
+		else:
+			projectile_nodes[pid].update_position(p.get("pos", 0.0))
+
+	for pid in projectile_nodes.keys():
+		if not alive_proj_ids.has(pid):
+			projectile_nodes[pid].queue_free()
+			projectile_nodes.erase(pid)
+	# print("🎯 Projektily v snapshote: ", projectiles_data.size())
 	queue_redraw()
 
+
+func _spawn_unit_node(id: int, unit_data: Dictionary):
+	var node = unit_scene.instantiate()
+	node.position = Vector2(unit_data.get("pos", 0.0), 400)
+	add_child(node)
+	unit_nodes[id] = node
+	var utype = unit_data.get("unit_type", "jaskynny_muz")
+	node.setup(utype)
+	node.update_from_snapshot(unit_data)
+
+
+func _remove_unit_node(id: int):
+	if unit_nodes.has(id):
+		var node = unit_nodes[id]
+		unit_nodes.erase(id)
+		if node.has_method("play_death"):
+			node.play_death()
+		else:
+			node.queue_free()
+
+
+# _draw() len pre základne
 func _draw():
 	if last_snapshot.is_empty():
 		return
 
-	# --- VYKRESLENIE JEDNOTIEK ---
-	var units = last_snapshot.get("units", [])
-	for u in units:
-		var owner = u.get("owner", 0)
-		var pos_x = u.get("pos", 0)
-		
-		# Farba podľa hráča
-		var color = Color.BLUE if int(owner) == 1 else Color.RED
-		
-		# Vykreslenie (Y je nastavené na 400, pos_x berieme zo servera)
-		draw_rect(Rect2(Vector2(pos_x, 400), Vector2(20, 20)), color)
-
-	# --- VYKRESLENIE ZÁKLADNÍ ---
 	var players = last_snapshot.get("players", {})
-	
-	# Základňa 1 (vľavo)
+
 	if players.has("base_hp_1"):
 		var hp1 = players["base_hp_1"]
-		draw_rect(Rect2(Vector2(150-40, 380), Vector2(40, 40)), Color.GREEN if hp1 > 0 else Color.RED) #150 pride zo servera a -40 je veľkostť campu
-		
-	# Základňa 2 (vpravo)
+		draw_rect(Rect2(Vector2(150-40, 360), Vector2(40, 40)), Color.GREEN if hp1 > 0 else Color.RED)
+		draw_string(ThemeDB.fallback_font, Vector2(110, 355), "HP: %d" % hp1, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+
 	if players.has("base_hp_2"):
 		var hp2 = players["base_hp_2"]
-		draw_rect(Rect2(Vector2(1002+20, 380), Vector2(40, 40)), Color.GREEN if hp2 > 0 else Color.RED) #1002 pride zo servera a +20 je veľkostť campu -> tak to centruje nwm prečo...
+		draw_rect(Rect2(Vector2(1002+20, 360), Vector2(40, 40)), Color.GREEN if hp2 > 0 else Color.RED)
+		draw_string(ThemeDB.fallback_font, Vector2(1022, 355), "HP: %d" % hp2, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
 
-# --- OVLÁDANIE (Tlačidlá) ---
+
+# --- OVLÁDANIE ---
 
 func request_play_card(card_id: String):
-	if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
-		var msg := {
-			"type": "play_card",
-			"card": card_id
-		}
-		socket.send_text(JSON.stringify(msg))
-		print("📤 Poslaná karta: ", card_id)
-	
-	
 	if not game_started:
 		return
+	if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		socket.send_text(JSON.stringify({"type": "play_card", "card": card_id}))
+		print("📤 Poslaná karta: ", card_id)
+
 
 func _on_vojak_pressed():
-	request_play_card("spawn_vojak")
+	request_play_card("spawn_jaskynny_muz")
 
 func _on_rýchly_vojak_pressed():
-	request_play_card("spawn_vojak_rychly")
+	request_play_card("spawn_musketier")
 
-# func _on_ready_pressed():
+
 func client_ready():
 	socket.send_text(JSON.stringify({
 		"type": "find_match",

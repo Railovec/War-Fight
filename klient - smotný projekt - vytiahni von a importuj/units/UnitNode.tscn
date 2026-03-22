@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://duq8u24lac38r"]
+
+[ext_resource type="Script" uid="uid://dlv2b33lqwsny" path="res://units/UnitNode.gd" id="1_aec33"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_aec33")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_right = 4.0
+offset_bottom = 27.0
