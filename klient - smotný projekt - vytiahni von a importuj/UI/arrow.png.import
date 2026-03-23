@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1bax0h6bte6k"
-path="res://.godot/imported/oštep.png-1ba1e0406710bb4dfe38725e7f206ff2.ctex"
+uid="uid://bpdxqv86yax8t"
+path="res://.godot/imported/arrow.png-50218bdbebfd4cc62dfc05ef69a62455.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://obrazky/oštep.png"
-dest_files=["res://.godot/imported/oštep.png-1ba1e0406710bb4dfe38725e7f206ff2.ctex"]
+source_file="res://UI/arrow.png"
+dest_files=["res://.godot/imported/arrow.png-50218bdbebfd4cc62dfc05ef69a62455.ctex"]
 
 [params]
 

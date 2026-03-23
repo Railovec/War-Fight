@@ -118,3 +118,56 @@ func _request(endpoint: String, method: int, body: String) -> Array:
 		return parsed
 
 	return [parsed]
+
+
+# Pridaj gold hráčovi
+func add_gold(uuid: String, amount: int) -> void:
+	var player = await get_player(uuid)
+	if player.is_empty():
+		return
+	var new_gold: int = int(player.get("gold", 0)) + amount
+	var body := JSON.stringify({"gold": new_gold})
+	await _request(
+		"/rest/v1/players?id=eq." + uuid,
+		HTTPClient.METHOD_PATCH, body
+	)
+	Global.gold = new_gold
+	Global.save_game()
+	print("💰 Gold aktualizovaný: ", new_gold)
+
+
+# Pridaj kartu hráčovi
+func add_card(uuid: String, card_id: String) -> void:
+	# Skontroluj či kartu už má
+	var result = await _request(
+		"/rest/v1/player_cards?player_id=eq." + uuid + "&card_id=eq." + card_id + "&select=*",
+		HTTPClient.METHOD_GET, ""
+	)
+	if result.size() > 0:
+		# Už má kartu — pridaj duplikát
+		var current_count: int = int(result[0].get("count", 1))
+		var body := JSON.stringify({"count": current_count + 1})
+		await _request(
+			"/rest/v1/player_cards?player_id=eq." + uuid + "&card_id=eq." + card_id,
+			HTTPClient.METHOD_PATCH, body
+		)
+		print("📦 Duplikát karty: ", card_id, " count: ", current_count + 1)
+	else:
+		# Nová karta
+		var body := JSON.stringify({
+			"player_id": uuid,
+			"card_id": card_id,
+			"level": 1,
+			"count": 1
+		})
+		await _request("/rest/v1/player_cards", HTTPClient.METHOD_POST, body)
+		print("🃏 Nová karta pridaná: ", card_id)
+
+
+# Načítaj všetky karty hráča
+func get_player_cards(uuid: String) -> Array:
+	var result = await _request(
+		"/rest/v1/player_cards?player_id=eq." + uuid + "&select=*",
+		HTTPClient.METHOD_GET, ""
+	)
+	return result

@@ -1,6 +1,6 @@
 extends Node
-var xp=0
-var coins=0
+# var xp=0
+var gold: int = 0
 var damage_level=1
 var xp_mnozstvo_level=1
 var coiny_mnozstvo_level=1
@@ -40,6 +40,7 @@ func save_game():
 		"meno": username,
 		"uuid": player_db_id,
 		"trophies": trophies,
+		"gold": gold,
 	}
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
@@ -55,6 +56,7 @@ func load_game():
 	username = str(data.get("meno", ""))
 	player_db_id = str(data.get("uuid", ""))
 	trophies = int(data.get("trophies", 0))
+	gold = data.get("gold", 0)
  
 # ================= UUID GENERÁTOR =================
 func _generate_uuid() -> String:

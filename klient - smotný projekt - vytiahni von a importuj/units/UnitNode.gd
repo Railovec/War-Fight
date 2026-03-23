@@ -87,7 +87,11 @@ func update_from_snapshot(unit_data: Dictionary):
 	else:
 		sprite.flip_h = true
 
-	position.x = new_x
+	# Offset aby jednotky nestáli na rovnakom mieste
+	if owner_id == 1:
+		position.x = new_x - 30
+	else:
+		position.x = new_x + 30
 	position.y = 325
 	hp_bar.max_value = max_hp
 	hp_bar.value = current_hp
