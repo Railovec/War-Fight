@@ -85,6 +85,19 @@ func dvojklik():
 					break
 				if jeuz == false and  a == 0 and Global.postavy[zz.get_path()]:
 					bok20.texture = zz
+					var slot_index = 0
+					for i in range(node_2d.get_children().size()):
+						var slot = node_2d.get_children()[i]
+						for s in slot.get_children():
+							if s == bok20:
+								slot_index = i
+					if zz != null:
+						var image_path = zz.get_path()
+						var card_id = Global.card_image_to_id.get(image_path, image_path)
+						Global.deck[slot_index] = card_id
+						Global.save_game()
+						Supabase.save_deck(Global.player_db_id, Global.deck)
+						print("💾 Deck slot ", slot_index, ": ", card_id)
 				a = 1
 				but =null
 
@@ -202,3 +215,6 @@ func _on_button_12_pressed():
 		dvojklik()
 	e = true
 	$"../../../Timer".start()
+
+func _on_button_exit_pressed():
+	get_tree().change_scene_to_file("res://menu/startovascena.tscn")

@@ -12,11 +12,22 @@ var username: String = ""
 var trophies: int = 0
 var player_db_id: String = ""  # toto bude náš UUID
  
+var deck: Array = ["", "", "", "", "", ""]  # 6 slotov, prázdne = nezaplnené
+
 # ci je postava odomknuta
 var postavy = {
 	"res://nesmej sa/bul/pistol(SILENT STRIKER.png": false,
+	"res://Card/Card_profile_picture/musketier_profile.png": true,
+	"res://Card/Card_profile_picture/jaskynny_muz_profile.png": true,
 }
  
+var card_image_to_id = {
+	"res://Card/Card_profile_picture/musketier_profile.png": "spawn_musketier",
+	"res://Card/Card_profile_picture/jaskynny_muz_profile.png": "spawn_jaskynny_muz",
+	
+	
+}
+
 var save_path = "user://save.dat"
  
 func _ready():
@@ -41,6 +52,7 @@ func save_game():
 		"uuid": player_db_id,
 		"trophies": trophies,
 		"gold": gold,
+		"deck": deck,
 	}
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
@@ -57,6 +69,7 @@ func load_game():
 	player_db_id = str(data.get("uuid", ""))
 	trophies = int(data.get("trophies", 0))
 	gold = data.get("gold", 0)
+	deck = data.get("deck", ["", "", "", "", "", ""])
  
 # ================= UUID GENERÁTOR =================
 func _generate_uuid() -> String:

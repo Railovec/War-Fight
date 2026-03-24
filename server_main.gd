@@ -133,7 +133,14 @@ func _handle_find_match(peer_id: int, msg: Dictionary):
 		var opponent = matchmaking_queue[opponent_idx]
 		matchmaking_queue.remove_at(opponent_idx)
 		_start_match(peer_id, opponent.peer_id)
-
+	
+	var deck: Array = msg.get("deck", [])
+	player_info[peer_id] = {
+		"username": username,
+		"trophies": trophies,
+		"deck": deck  # ← pridaj
+	}
+	print("🃏 Deck hráča ", username, ": ", deck)
 
 func _find_opponent(peer_id: int, trophies: int) -> int:
 	for i in matchmaking_queue.size():
@@ -169,14 +176,16 @@ func _start_match(peer_id_1: int, peer_id_2: int):
 		"type": "player_id",
 		"id": 1,
 		"opponent": player_info[peer_id_2].username,
-		"opponent_trophies": player_info[peer_id_2].trophies
+		"opponent_trophies": player_info[peer_id_2].trophies,
+		"deck": player_info[peer_id_1].get("deck", [])
 	})
 
 	_send(peer_id_2, {
 		"type": "player_id",
 		"id": 2,
 		"opponent": player_info[peer_id_1].username,
-		"opponent_trophies": player_info[peer_id_1].trophies
+		"opponent_trophies": player_info[peer_id_1].trophies,
+		"deck": player_info[peer_id_1].get("deck", [])
 	})
 
 	# Spusti hru priamo — nepotrebujeme čakať na start_game od klientov

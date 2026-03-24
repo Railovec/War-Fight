@@ -171,3 +171,11 @@ func get_player_cards(uuid: String) -> Array:
 		HTTPClient.METHOD_GET, ""
 	)
 	return result
+
+func save_deck(uuid: String, deck: Array) -> void:
+	var body := JSON.stringify({"deck": deck})
+	await _request(
+		"/rest/v1/players?id=eq." + uuid,
+		HTTPClient.METHOD_PATCH, body
+	)
+	print("✅ Deck uložený do Supabase")

@@ -20,7 +20,7 @@ func _on_upgrade_pressed() -> void:
 
 
 func _on_equip_pressed() -> void:
-	get_tree().change_scene_to_file("res://client/ClientScene.tscn")
+	get_tree().change_scene_to_file("res://scroll.tscn")
 
 
 func _on_quit_pressed() -> void:
@@ -49,8 +49,13 @@ func _supabase_login() -> void:
 		return
 
 	Global.trophies = player_data.get("trophies", 100)
-	Global.save_game()
+	Global.gold = int(player_data.get("gold", 0))
 	
-	# Aktualizuj label po načítaní zo Supabase
+	# Načítaj deck zo Supabase ak je uložený
+	var saved_deck = player_data.get("deck", [])
+	if saved_deck.size() == 6:
+		Global.deck = saved_deck
+	
+	Global.save_game()
 	$TrophyLabel.text = "🏆 " + str(Global.trophies)
 	print("✅ Prihlásený: ", Global.username, " | Trofeje: ", Global.trophies)

@@ -50,3 +50,8 @@ func _gui_input(event):
 			for child in tuknutetlacitko.get_children():
 				if child is TextureRect:
 					child.texture = null
+					for i in range(Global.deck.size()):
+						if tuknutetlacitko == get_child(i):
+								Global.deck[i] = ""
+								Global.save_game()
+								print("🗑️ Deck slot ", i, " vymazaný")
