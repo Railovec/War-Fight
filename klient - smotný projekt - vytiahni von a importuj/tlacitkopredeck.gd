@@ -16,7 +16,7 @@ extends Button
 @onready var texture_rect13= $"../Button13/TextureRect"
 @onready var texture_rect14= $"../Button14/TextureRect"
 @onready var texture_rect15= $"../Button15/TextureRect"
-@onready var grid_container = $".."
+@onready var grid_container = $"../../GridContainer"
 
 #zamykanie dam do globality pretoze ked budem hrat levly tam sa to ulozi...
 var but
@@ -30,8 +30,9 @@ func _ready():
 	for i in grid_container.get_children():
 		for x in i.get_children():
 			if x.texture !=null:
-				if Global.postavy[x.texture.get_path()] ==false:
-					x.modulate = Color(0.4,0.4,0.4)
+				var card_id_r = Global.card_image_to_id.get(x.texture.get_path(), "")
+				if not Global.owns_card(card_id_r):
+					x.modulate = Color(0.4, 0.4, 0.4)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -83,7 +84,8 @@ func dvojklik():
 					jeuz=true
 				if bok20.texture != null:
 					break
-				if jeuz == false and  a == 0 and Global.postavy[zz.get_path()]:
+				var card_id_check = Global.card_image_to_id.get(zz.get_path(), "")
+				if jeuz == false and a == 0 and Global.owns_card(card_id_check):
 					bok20.texture = zz
 					var slot_index = 0
 					for i in range(node_2d.get_children().size()):

@@ -12,11 +12,7 @@ offset_bottom = 211.5
 
 [node name="TextureRect" type="TextureRect" parent="Button"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+scale = Vector2(0.75, 0.75)
 
 [node name="Button2" type="Button" parent="."]
 offset_top = 234.0
@@ -25,11 +21,7 @@ offset_bottom = 423.0
 
 [node name="TextureRect" type="TextureRect" parent="Button2"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+scale = Vector2(0.75, 0.75)
 
 [node name="Button3" type="Button" parent="."]
 offset_top = 445.5
@@ -38,11 +30,7 @@ offset_bottom = 634.5
 
 [node name="TextureRect" type="TextureRect" parent="Button3"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+scale = Vector2(0.75, 0.75)
 
 [node name="Button4" type="Button" parent="."]
 offset_top = 657.0
@@ -51,11 +39,7 @@ offset_bottom = 846.0
 
 [node name="TextureRect" type="TextureRect" parent="Button4"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+scale = Vector2(0.75, 0.75)
 
 [node name="Button5" type="Button" parent="."]
 offset_top = 868.5
@@ -64,11 +48,7 @@ offset_bottom = 1057.5
 
 [node name="TextureRect" type="TextureRect" parent="Button5"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+scale = Vector2(0.75, 0.75)
 
 [node name="Button6" type="Button" parent="."]
 offset_left = 1700.0
@@ -83,6 +63,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.75, 0.75)
 
 [node name="Button7" type="Button" parent="."]
 offset_left = 1700.0

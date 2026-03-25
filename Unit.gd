@@ -13,6 +13,8 @@ var attack_cooldown: float = 0.0
 var base_attack_speed: float = 1.0
 var projectile_spawned: bool = false  # či už bol vystrelený projektil
 var projectile_in_flight: bool = false
+var level: int = 1
+
 
 # Support / buff
 var is_support: bool = false

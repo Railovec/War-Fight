@@ -138,7 +138,8 @@ func _handle_find_match(peer_id: int, msg: Dictionary):
 	player_info[peer_id] = {
 		"username": username,
 		"trophies": trophies,
-		"deck": deck  # ← pridaj
+		"deck": deck,
+		"card_levels": msg.get("card_levels", {}),
 	}
 	print("🃏 Deck hráča ", username, ": ", deck)
 
@@ -188,7 +189,8 @@ func _start_match(peer_id_1: int, peer_id_2: int):
 		"deck": player_info[peer_id_1].get("deck", [])
 	})
 
-	# Spusti hru priamo — nepotrebujeme čakať na start_game od klientov
+	battle.set_player_levels(1, player_info[peer_id_1].get("card_levels", {}))
+	battle.set_player_levels(2, player_info[peer_id_2].get("card_levels", {}))
 	start_game()
 
 

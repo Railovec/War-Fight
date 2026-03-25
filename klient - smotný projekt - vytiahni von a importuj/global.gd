@@ -11,6 +11,8 @@ var zivoty_level=1
 var username: String = ""
 var trophies: int = 0
 var player_db_id: String = ""  # toto bude náš UUID
+var card_levels: Dictionary = {}  
+var card_counts: Dictionary = {}  # card_id -> count
  
 var deck: Array = ["", "", "", "", "", ""]  # 6 slotov, prázdne = nezaplnené
 
@@ -19,12 +21,21 @@ var postavy = {
 	"res://nesmej sa/bul/pistol(SILENT STRIKER.png": false,
 	"res://Card/Card_profile_picture/musketier_profile.png": true,
 	"res://Card/Card_profile_picture/jaskynny_muz_profile.png": true,
+	"res://Card/Card_profile_picture/mamut_profile.png": true,
+	"res://Card/Card_profile_picture/vojnovy_voz_profile.png": true,
+	"res://Card/Card_profile_picture/faraon_profile.png": true,
+	
+	
+	
+	
 }
  
 var card_image_to_id = {
 	"res://Card/Card_profile_picture/musketier_profile.png": "spawn_musketier",
 	"res://Card/Card_profile_picture/jaskynny_muz_profile.png": "spawn_jaskynny_muz",
-	
+	"res://Card/Card_profile_picture/mamut_profile.png": "spawn_mamut",
+	"res://Card/Card_profile_picture/vojnovy_voz_profile.png": "spawn_vojnovy_voz",
+	"res://Card/Card_profile_picture/faraon_profile.png": "spawn_faraon",
 	
 }
 
@@ -53,6 +64,8 @@ func save_game():
 		"trophies": trophies,
 		"gold": gold,
 		"deck": deck,
+		"card_levels": card_levels,
+		"card_counts": card_counts,
 	}
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
@@ -70,6 +83,8 @@ func load_game():
 	trophies = int(data.get("trophies", 0))
 	gold = data.get("gold", 0)
 	deck = data.get("deck", ["", "", "", "", "", ""])
+	card_levels = data.get("card_levels", {})
+	card_counts = data.get("card_counts", {})
  
 # ================= UUID GENERÁTOR =================
 func _generate_uuid() -> String:
@@ -81,3 +96,10 @@ func _generate_uuid() -> String:
 	b[6] = (b[6] & 0x0f) | 0x40
 	b[8] = (b[8] & 0x3f) | 0x80
 	return "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x" % b
+	
+	
+# ================= inventar ===============
+var owned_cards: Array = ["spawn_jaskynny_muz", "spawn_musketier"]  # default odomknuté
+
+func owns_card(card_id: String) -> bool:
+	return owned_cards.has(card_id)	

@@ -6,21 +6,12 @@
 [node name="Client" type="Node2D"]
 script = ExtResource("1_3smv3")
 
-[node name="spawn_musketier" type="Button" parent="."]
-offset_left = 121.0
-offset_top = 529.0
-offset_right = 287.0
-offset_bottom = 615.0
-text = "spawn_musketier"
-
-[node name="spawn_jaskynny_muz" type="Button" parent="."]
-offset_left = 438.0
-offset_top = 525.0
-offset_right = 668.0
-offset_bottom = 612.0
-text = "spawn_jaskynny_muz"
+[node name="DeckButtons" type="HBoxContainer" parent="."]
+offset_left = 55.0
+offset_top = 424.0
+offset_right = 1101.0
+offset_bottom = 609.0
+theme_override_constants/separation = 10
+alignment = 1
 
 [node name="CanvasLayer" parent="." instance=ExtResource("2_81r4x")]
-
-[connection signal="pressed" from="spawn_musketier" to="." method="_on_rýchly_vojak_pressed"]
-[connection signal="pressed" from="spawn_jaskynny_muz" to="." method="_on_vojak_pressed"]

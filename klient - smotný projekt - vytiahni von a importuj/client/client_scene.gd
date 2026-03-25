@@ -27,6 +27,7 @@ var unit_nodes: Dictionary = {}
 var unit_scene = preload("res://units/UnitNode.tscn")
 
 func _ready():
+	_build_deck_buttons()
 	var heartbeat_timer = Timer.new()
 	heartbeat_timer.wait_time = 0.5
 	heartbeat_timer.autostart = true
@@ -177,10 +178,7 @@ func _remove_unit_node(id: int):
 	if unit_nodes.has(id):
 		var node = unit_nodes[id]
 		unit_nodes.erase(id)
-		if node.has_method("play_death"):
-			node.play_death()
-		else:
-			node.queue_free()
+		node.play_death()
 
 
 # _draw() len pre základne
@@ -214,18 +212,45 @@ func request_play_card(card_id: String):
 		print("📤 Poslaná karta: ", card_id)
 
 
-func _on_vojak_pressed():
-	request_play_card("spawn_jaskynny_muz")
-
-func _on_rýchly_vojak_pressed():
-	request_play_card("spawn_musketier")
-
-
 func client_ready():
 	socket.send_text(JSON.stringify({
 		"type": "find_match",
 		"username": Global.username,
 		"trophies": Global.trophies,
 		"deck": Global.deck,
+		"card_levels": Global.card_levels,
 	}))
 	print("📤 Hľadám súpera... Trofeje: ", Global.trophies, "Deck: ", Global.deck)
+
+func _build_deck_buttons():
+	# Nájdi kontajner kde sú tlačidlá (uprav cestu podľa tvojej scény)
+	var container = $DeckButtons
+	container.add_theme_constant_override("separation", 10)
+	container.alignment = BoxContainer.ALIGNMENT_CENTER
+	
+	for child in container.get_children():
+		child.queue_free()
+	
+	for i in range(Global.deck.size()):
+		var card_id = Global.deck[i]
+		if card_id == "":
+			continue
+		
+		var img_path = _get_card_image(card_id)
+		var btn = Button.new()
+		btn.custom_minimum_size = Vector2(150, 150)
+		btn.expand_icon = true
+		
+		if img_path != "":
+			var tex = load(img_path)
+			if tex:
+				btn.icon = tex
+		
+		btn.pressed.connect(func(): request_play_card(card_id))
+		container.add_child(btn)
+
+func _get_card_image(card_id: String) -> String:
+	for img_path in Global.card_image_to_id.keys():
+		if Global.card_image_to_id[img_path] == card_id:
+			return img_path
+	return ""

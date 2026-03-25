@@ -179,3 +179,33 @@ func save_deck(uuid: String, deck: Array) -> void:
 		HTTPClient.METHOD_PATCH, body
 	)
 	print("✅ Deck uložený do Supabase")
+
+
+
+func upgrade_card(uuid: String, card_id: String) -> bool:
+	var result = await _request(
+		"/rest/v1/player_cards?player_id=eq." + uuid + "&card_id=eq." + card_id + "&select=*",
+		HTTPClient.METHOD_GET, ""
+	)
+	if result.is_empty():
+		return false
+	
+	var current_level = int(result[0].get("level", 1))
+	var current_count = int(result[0].get("count", 1))
+	var required_count = _cards_needed(current_level)
+		
+	if current_count < required_count:
+		return false
+	
+	var body := JSON.stringify({
+		"level": current_level + 1,
+		"count": current_count - required_count
+	})
+	await _request(
+		"/rest/v1/player_cards?player_id=eq." + uuid + "&card_id=eq." + card_id,
+		HTTPClient.METHOD_PATCH, body
+	)
+	return true
+
+func _cards_needed(level: int) -> int:
+	return 5 * int(pow(2, level - 1))  # 5, 10, 20, 40...

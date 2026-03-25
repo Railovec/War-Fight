@@ -14,7 +14,7 @@ func register_cards():
 	_add({
 		"id": "spawn_jaskynny_muz",
 		"cost": 3, "type": "spawn", "unit_type": "jaskynny_muz",
-		"speed": 1.0, "era": "stone"
+		"speed": 100.0, "era": "stone"
 	})
 	_add({
 		"id": "spawn_lovec",

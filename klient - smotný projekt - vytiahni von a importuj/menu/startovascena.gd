@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var gold_label = $VBoxContainer/GoldLabel
+@onready var name_label = $VBoxContainer/NameLabel
 
 func _ready() -> void:
 	if Global.username == "":
@@ -8,7 +10,9 @@ func _ready() -> void:
 		_supabase_login()
 	
 	# Zobraz trofeje hneď pri načítaní
-	$TrophyLabel.text = "🏆 " + str(Global.trophies)
+	$VBoxContainer/TrophyLabel.text = "🏆 " + str(Global.trophies)
+	$VBoxContainer/GoldLabel.text = "💰 " + str(Global.gold)
+	$VBoxContainer/NameLabel.text = "👤 " + Global.username
 
 
 func _on_button_pressed() -> void:
@@ -16,7 +20,7 @@ func _on_button_pressed() -> void:
 
 
 func _on_upgrade_pressed() -> void:
-	get_tree().change_scene_to_file("res://client/ClientScene.tscn")
+	get_tree().change_scene_to_file("res://upgrade.tscn")
 
 
 func _on_equip_pressed() -> void:
@@ -51,11 +55,21 @@ func _supabase_login() -> void:
 	Global.trophies = player_data.get("trophies", 100)
 	Global.gold = int(player_data.get("gold", 0))
 	
-	# Načítaj deck zo Supabase ak je uložený
 	var saved_deck = player_data.get("deck", [])
 	if saved_deck.size() == 6:
 		Global.deck = saved_deck
 	
+	# Načítaj karty — len raz
+	var player_cards = await Supabase.get_player_cards(Global.player_db_id)
+	Global.owned_cards = []
+	Global.card_counts = {}
+	Global.card_levels = {}
+	for pc in player_cards:
+		var cid = pc.get("card_id", "")
+		Global.owned_cards.append(cid)
+		Global.card_counts[cid] = int(pc.get("count", 1))
+		Global.card_levels[cid] = int(pc.get("level", 1))
+	
 	Global.save_game()
-	$TrophyLabel.text = "🏆 " + str(Global.trophies)
+	$VBoxContainer/TrophyLabel.text = "🏆 " + str(Global.trophies)
 	print("✅ Prihlásený: ", Global.username, " | Trofeje: ", Global.trophies)

@@ -78,9 +78,19 @@ func _on_spin_finished():
 	result_label.visible = true
 	print("🎰 Odmena: ", reward["label"])
 	
-	# Aplikuj odmenu
-	await _apply_reward(reward)
+	if reward["type"] == "mega_spin":
+		result_label.text = "MEGA SPIN! Točíš znova 2x!"
+		await get_tree().create_timer(1.5).timeout
+		# Prvé točenie
+		is_spinning = false
+		spin()
+		await get_tree().create_timer(8.0).timeout  # počkaj kým dobeží
+		# Druhé točenie
+		is_spinning = false
+		spin()
+		return
 	
+	await _apply_reward(reward)
 	emit_signal("reward_selected", reward)
 	await get_tree().create_timer(3.0).timeout
 	visible = false
@@ -122,6 +132,4 @@ func _apply_reward(reward: Dictionary) -> void:
 			print("💎 Drahokam = 50 gold")
 		
 		"mega_spin":
-			print("⭐ MEGA SPIN!")
-			await get_tree().create_timer(1.0).timeout
-			spin()
+			pass  # handled in _on_spin_finished

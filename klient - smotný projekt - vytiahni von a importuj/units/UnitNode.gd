@@ -18,6 +18,19 @@ const UNIT_CONFIG = {
 		"walk": {"file": "res://Card/Card_images/musketier_idle.png", "frames": 5, "cols": 5, "rows": 1, "fps": 6},
 		"attack": {"file": "res://Card/Card_images/musketier_attack.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
 	},
+	"mamut": {
+		"walk": {"file": "res://Card/Card_images/mamut_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 6},
+		"attack": {"file": "res://Card/Card_images/mamut_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 8},
+		"death": {"file": "res://Card/Card_images/mamut_death.png", "frames": 2, "cols": 2, "rows": 1, "fps": 6},
+	},
+	"vojnovy_voz": {
+		"walk": {"file": "res://Card/Card_images/vojnovy_voz_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 8},
+		"attack": {"file": "res://Card/Card_images/vojnovy_voz_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
+	},
+	"faraon": {
+		"walk": {"file": "res://Card/Card_images/faraon_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 8},
+		"attack": {"file": "res://Card/Card_images/faraon_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
+	},
 }
 
 func setup(type: String):
@@ -37,20 +50,26 @@ func _setup_animations():
 		frames.set_animation_speed(anim_name, anim["fps"])
 		frames.set_animation_loop(anim_name, anim_name == "walk")
 
-		var tex = load(anim["file"])
-		var img_size = tex.get_size()
-		var fw = img_size.x / anim["cols"]
-		var fh = img_size.y / anim["rows"]
-
-		for row in range(anim["rows"]):
-			for col in range(anim["cols"]):
-				var atlas = AtlasTexture.new()
-				atlas.atlas = tex
-				atlas.region = Rect2(col * fw, row * fh, fw, fh)
-				frames.add_frame(anim_name, atlas)
+		# Skontroluj či sú framy samostatné súbory alebo jeden sheet
+		if anim.get("separate_files", false):
+			for i in anim["frames"]:
+				var path = anim["file_pattern"] % i
+				var tex = load(path)
+				frames.add_frame(anim_name, tex)
+		else:
+			var tex = load(anim["file"])
+			var img_size = tex.get_size()
+			var fw = img_size.x / anim["cols"]
+			var fh = img_size.y / anim["rows"]
+			for row in range(anim["rows"]):
+				for col in range(anim["cols"]):
+					var atlas = AtlasTexture.new()
+					atlas.atlas = tex
+					atlas.region = Rect2(col * fw, row * fh, fw, fh)
+					frames.add_frame(anim_name, atlas)
 
 	sprite.sprite_frames = frames
-	sprite.scale = Vector2(0.5, 0.5) # veľkosť
+	sprite.scale = Vector2(0.5, 0.5)
 
 func _setup_hp_bar():
 	hp_bar.min_value = 0
@@ -104,6 +123,9 @@ func update_from_snapshot(unit_data: Dictionary):
 		sprite.play("walk")
 
 func play_death():
+	if sprite.sprite_frames.has_animation("death"):
+		sprite.play("death")
+		await sprite.animation_finished
 	queue_free()
 
 func _on_animation_finished():

@@ -312,8 +312,10 @@ func check_base_hit():
 		if u.ignore_units:
 			continue
 		if u.owner_id == 1 and u.position >= bases[2] - 1:
+			u.attack_cooldown = u.attack_speed
 			bases_hp[2] -= u.damage
 		elif u.owner_id == 2 and u.position <= bases[1] + 1:
+			u.attack_cooldown = u.attack_speed
 			bases_hp[1] -= u.damage
 	if bases_hp[1] <= 0 and game_started:
 		print_rich("[color=green]HRÁČ 2 VYHRAL[/color]")
@@ -386,17 +388,20 @@ func spawn_unit(owner_id: int, card) -> Unit:
 		"mamut":
 			u.hp = 250; u.max_hp = 250; u.damage = 20; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.death_explosion_radius = 50.0; u.death_explosion_damage = 30
+			u.set_meta("unit_type", "mamut")
 		"bronzovy_vojak":
 			u.hp = 90; u.max_hp = 90; u.damage = 12; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 		"vojnovy_voz":
 			u.hp = 80; u.max_hp = 80; u.damage = 15; u.attack_speed = 0.8; u.attack_range = DEFAULT_MELEE_RANGE
 			u.splash_radius = 15.0
+			u.set_meta("unit_type", "vojnovy_voz")
 		"lukostrelec":
 			u.hp = 50; u.max_hp = 50; u.damage = 18; u.attack_speed = 1.5
 			u.is_ranged = true; u.attack_range = 120.0; u.target_mode = Unit.TargetMode.LOWEST_HP
 		"faraon":
 			u.hp = 100; u.max_hp = 100; u.damage = 5; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
 			u.is_support = true; u.attack_speed_buff = 0.4
+			u.set_meta("unit_type", "faraon")
 		"legionar":
 			u.hp = 120; u.max_hp = 120; u.damage = 14; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.formation_bonus = true
@@ -446,6 +451,14 @@ func spawn_unit(owner_id: int, card) -> Unit:
 
 	u.base_attack_speed = u.attack_speed
 	units.append(u)
+	
+	
+	var lvl = player_card_levels[owner_id].get(card.id, 1)
+	var multiplier = 1.0 + (lvl - 1) * 0.1
+	u.hp = int(u.hp * multiplier)
+	u.max_hp = int(u.max_hp * multiplier)
+	u.damage = int(u.damage * multiplier)
+	
 	print("Spawned: ", card.unit_type, " pre hráča ", owner_id)
 	return u
 
@@ -532,5 +545,10 @@ func _find_unit_by_id(spawn_id: int) -> Unit:
 		if u.spawn_id == spawn_id:
 			return u
 	return null
-	
+
+
+var player_card_levels: Dictionary = {1: {}, 2: {}}
+
+func set_player_levels(player_id: int, levels: Dictionary):
+	player_card_levels[player_id] = levels
 	
