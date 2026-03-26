@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bousgi7ch638"]
 
 [ext_resource type="Script" uid="uid://driuxgqm80ff" path="res://UI/WheelScene.gd" id="1_r8xbl"]
-[ext_resource type="Texture2D" uid="uid://bsu6colsp6302" path="res://UI/wheel.png" id="2_fmo1r"]
 [ext_resource type="Texture2D" uid="uid://bpdxqv86yax8t" path="res://UI/arrow.png" id="3_26fei"]
+[ext_resource type="Texture2D" uid="uid://dcidf7n6xj7l0" path="res://zasranekoleso3.png" id="3_r8xbl"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_r8xbl")
@@ -15,10 +15,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.7058824)
 
-[node name="Wheel" type="Sprite2D" parent="."]
-position = Vector2(576, 324)
+[node name="Zasranekoleso3" type="Sprite2D" parent="."]
+position = Vector2(587, 327)
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("2_fmo1r")
+texture = ExtResource("3_r8xbl")
 
 [node name="Arrow" type="Sprite2D" parent="."]
 position = Vector2(576, 100)
