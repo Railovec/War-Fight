@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://ds3o2yvj2qtgi"]
 
-[ext_resource type="Script" uid="uid://couce7812ux7d" path="res://tlacitkopredeck.gd" id="1_xwqay"]
+[ext_resource type="Script" uid="uid://couce7812ux7d" path="res://tlacitkopredeck.gd" id="1_11rd4"]
 [ext_resource type="PackedScene" uid="uid://bnaquye15h8o4" path="res://pravyeqiup.tscn" id="2_hmjxn"]
 [ext_resource type="Texture2D" uid="uid://doxd0ff8vo1x8" path="res://Card/Card_profile_picture/musketier_profile.png" id="2_rlle2"]
 [ext_resource type="Texture2D" uid="uid://kgi2u4dd4h1c" path="res://Card/Card_profile_picture/jaskynny_muz_profile.png" id="3_aiko0"]
@@ -32,7 +32,7 @@ columns = 7
 [node name="Button" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
 layout_mode = 2
-script = ExtResource("1_xwqay")
+script = ExtResource("1_11rd4")
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button"]
 layout_mode = 1
@@ -567,8 +567,6 @@ grow_vertical = 2
 position = Vector2(944, 536)
 zoom = Vector2(0.6, 0.6)
 
-[node name="Node2D" parent="." instance=ExtResource("2_hmjxn")]
-
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
 offset_left = 271.0
@@ -597,6 +595,8 @@ text = "back"
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.4
+
+[node name="Node2D" parent="." instance=ExtResource("2_hmjxn")]
 
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button" to="ScrollContainer/GridContainer/Button" method="_on_pressed"]
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button2" to="ScrollContainer/GridContainer/Button" method="_on_button_2_pressed"]

@@ -1,37 +1,40 @@
 extends Node2D
 
 
-
 var tuknutetlacitko
+var citlacitko
 
-
-func _on_button_2_pressed() -> void:
+func _on_button_2_pressed(event) -> void:
 	tuknutetlacitko=$Button2
+	citlacitko=1
+
+
 
 
 func _on_button_pressed() -> void:
 	tuknutetlacitko=$Button
+	citlacitko=1
 
 
 func _on_button_3_pressed() -> void:
-	tuknutetlacitko=$Button3
+	citlacitko=1
 
 
 func _on_button_4_pressed() -> void:
 	tuknutetlacitko=$Button4
-
+	citlacitko=1
 
 func _on_button_5_pressed() -> void:
 	tuknutetlacitko=$Button5
-
+	citlacitko=1
 
 func _on_button_6_pressed() -> void:
 	tuknutetlacitko=$Button6
-
+	citlacitko=1
 
 func _on_button_7_pressed() -> void:
 	tuknutetlacitko=$Button7
-
+	citlacitko=1
 
 func _on_button_8_pressed() -> void:
 	tuknutetlacitko=$Button8
@@ -46,7 +49,9 @@ func _on_button_10_pressed() -> void:
 	
 func _gui_input(event):
 	if event is InputEventMouseButton :
-		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
+		print("kokot")
+		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click and citlacitko== 1 :
+			print("kokot")
 			for child in tuknutetlacitko.get_children():
 				if child is TextureRect:
 					child.texture = null
