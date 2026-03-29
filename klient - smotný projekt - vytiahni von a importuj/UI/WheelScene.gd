@@ -23,6 +23,8 @@ const REWARDS = [
 
 ]
 
+
+
 const SECTOR_ANGLE = 360.0 / 8.0
 const WHEEL_OFFSET = 0.0  # uprav ak sektor 0 nesedí s obrázkom
 
@@ -105,14 +107,27 @@ func _on_spin_finished():
 	visible = false
 
 
+func _get_cards_for_current_arena() -> Array:
+	var trophies = Global.trophies
+	if trophies >= 2000:
+		return ["spawn_vojak_ww2", "spawn_panzer", "spawn_odstrelec"]
+	elif trophies >= 1500:
+		return ["spawn_musketier", "spawn_parny_tank", "spawn_inzinier", "spawn_dynamiter"]
+	elif trophies >= 1000:
+		return ["spawn_rytier", "spawn_trebuchet", "spawn_mnich", "spawn_drak"]
+	elif trophies >= 600:
+		return ["spawn_legionar", "spawn_balistar", "spawn_gladiator", "spawn_saboter"]
+	elif trophies >= 300:
+		return ["spawn_bronzovy_vojak", "spawn_vojnovy_voz", "spawn_lukostrelec", "spawn_faraon"]
+	else:
+		return ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut"]
+
 func _apply_reward(reward: Dictionary) -> void:
 	var uuid := Global.player_db_id
-
 	match reward["type"]:
 		"gold":
 			await Supabase.add_gold(uuid, int(reward["value"]))
 			print("💰 Pridaných ", reward["value"], " gold")
-
 		"trophies":
 			Global.trophies += int(reward["value"])
 			Global.save_game()
@@ -122,22 +137,18 @@ func _apply_reward(reward: Dictionary) -> void:
 				HTTPClient.METHOD_PATCH, body
 			)
 			print("🏆 Pridaných ", reward["value"], " trofejí")
-
 		"card", "rare_card":
-			var available_cards := ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut"]
+			var available_cards = _get_cards_for_current_arena()
 			var random_card = available_cards[randi() % available_cards.size()]
 			await Supabase.add_card(uuid, random_card)
-			result_label.text = "Karta: " + random_card + "!"
-
+			result_label.text = "Karta: " + random_card.replace("spawn_", "").capitalize() + "!"
 		"duplicate":
-			var available_cards := ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut"]
+			var available_cards = _get_cards_for_current_arena()
 			var random_card = available_cards[randi() % available_cards.size()]
 			await Supabase.add_card(uuid, random_card)
-			result_label.text = "Duplikát: " + random_card + "!"
-
+			result_label.text = "Duplikát: " + random_card.replace("spawn_", "").capitalize() + "!"
 		"gem":
 			await Supabase.add_gold(uuid, 50)
 			print("💎 Drahokam = 50 gold")
-
 		"mega_spin":
 			pass

@@ -13,6 +13,8 @@ var trophies: int = 0
 var player_db_id: String = ""  # toto bude náš UUID
 var card_levels: Dictionary = {}  
 var card_counts: Dictionary = {}  # card_id -> count
+var last_match_won: bool = false
+var game_over_shown: bool = false
  
 var deck: Array = ["", "", "", "", "", ""]  # 6 slotov, prázdne = nezaplnené
 
@@ -41,6 +43,16 @@ var card_image_to_id = {
 
 var save_path = "user://save.dat"
  
+var card_costs = {
+	"spawn_jaskynny_muz": 3, "spawn_lovec": 4, "spawn_saman": 6, "spawn_mamut": 8,
+	"spawn_bronzovy_vojak": 4, "spawn_vojnovy_voz": 7, "spawn_lukostrelec": 5, "spawn_faraon": 9,
+	"spawn_legionar": 5, "spawn_balistar": 8, "spawn_gladiator": 6, "spawn_saboter": 7,
+	"spawn_rytier": 6, "spawn_trebuchet": 9, "spawn_mnich": 5, "spawn_drak": 10,
+	"spawn_musketier": 5, "spawn_parny_tank": 10, "spawn_inzinier": 7, "spawn_dynamiter": 6,
+	"spawn_vojak_ww2": 4, "spawn_panzer": 10, "spawn_odstrelec": 7,
+}
+
+
 func _ready():
 	# Ak je spustený ako druhá testovacia inštancia
 	if "--second" in OS.get_cmdline_args():

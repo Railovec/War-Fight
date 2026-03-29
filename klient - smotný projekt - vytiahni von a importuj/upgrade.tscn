@@ -19,8 +19,8 @@ text = "BACK"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_right = 1133.0
-offset_bottom = 582.0
+offset_right = 780.0
+offset_bottom = 621.0
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
 layout_mode = 2

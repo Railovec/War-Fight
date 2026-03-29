@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://co7fuguiy07lv"
-path="res://.godot/imported/faraon_attack.png-67479a6f2d6c0b137a4f4589fb1d7806.ctex"
+path="res://.godot/imported/faraon_hit.png-e7e1a0dc4255c98e751472bc2e3748ab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Card/Card_images/faraon_attack.png"
-dest_files=["res://.godot/imported/faraon_attack.png-67479a6f2d6c0b137a4f4589fb1d7806.ctex"]
+source_file="res://Card/Card_images/faraon_hit.png"
+dest_files=["res://.godot/imported/faraon_hit.png-e7e1a0dc4255c98e751472bc2e3748ab.ctex"]
 
 [params]
 

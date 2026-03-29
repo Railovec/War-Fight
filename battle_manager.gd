@@ -51,10 +51,12 @@ func tick():
 	tick_projectiles()     
 	cleanup_dead_units()
 	check_base_hit()
+	tick_card_cooldowns()
 	var snap = get_game_snapshot()
 	var client := get_tree().get_root().find_child("Client", true, false)
 	if client:
 		client.update_snapshot(snap)
+	
 
 
 # ══════════════════════════════════════════
@@ -311,10 +313,10 @@ func check_base_hit():
 	for u in units:
 		if u.ignore_units:
 			continue
-		if u.owner_id == 1 and u.position >= bases[2] - 1:
+		if u.owner_id == 1 and u.position >= bases[2] - u.speed - 1:
 			u.attack_cooldown = u.attack_speed
 			bases_hp[2] -= u.damage
-		elif u.owner_id == 2 and u.position <= bases[1] + 1:
+		elif u.owner_id == 2 and u.position <= bases[1] + u.speed + 1:
 			u.attack_cooldown = u.attack_speed
 			bases_hp[1] -= u.damage
 	if bases_hp[1] <= 0 and game_started:
@@ -333,7 +335,19 @@ func check_base_hit():
 # KARTY / SPAWN
 # ══════════════════════════════════════════
 
+var card_cooldowns: Dictionary = {1: {}, 2: {}}
+
 func play_card(player_id: int, card_id: String):
+	var player_units = units.filter(func(u): return u.owner_id == player_id)
+	if player_units.size() >= 25:
+		print("❌ Limit jednotiek dosiahnutý")
+		return
+	
+	var cd = card_cooldowns[player_id].get(card_id, 0.0)
+	if cd > 0.0:
+		print("❌ Karta na cooldowne: ", cd)
+		return
+	
 	var card = get_node("../CardDatabase").cards.get(card_id)
 	if card == null:
 		print("Neznáma karta: ", card_id); return
@@ -351,6 +365,8 @@ func play_card(player_id: int, card_id: String):
 	else:
 		spawn_unit(player_id, card)
 	print("Hráč ", player_id, " zahral ", card_id, " | mana: ", player.mana)
+	
+	card_cooldowns[player_id][card_id] = 3.0
 
 
 func _cast_spell(player_id: int, card):
@@ -376,76 +392,76 @@ func spawn_unit(owner_id: int, card) -> Unit:
 	u.base_speed = card.speed
 
 	match card.unit_type:
-		"jaskynny_muz":
-			u.hp = 60; u.max_hp = 60; u.damage = 8; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"jaskynny_muz":  # 3 many
+			u.hp = 90; u.max_hp = 90; u.damage = 9; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.set_meta("unit_type", "jaskynny_muz")
-		"lovec":
-			u.hp = 40; u.max_hp = 40; u.damage = 12; u.attack_speed = 1.2
+		"lovec":  # 4 many
+			u.hp = 80; u.max_hp = 80; u.damage = 14; u.attack_speed = 1.2
 			u.is_ranged = true; u.attack_range = 80.0
-		"saman":
-			u.hp = 50; u.max_hp = 50; u.damage = 2; u.attack_speed = 1.0
-			u.is_healer = true; u.heal_amount = 5
-		"mamut":
-			u.hp = 250; u.max_hp = 250; u.damage = 20; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
-			u.death_explosion_radius = 50.0; u.death_explosion_damage = 30
+		"saman":  # 6 many
+			u.hp = 100; u.max_hp = 100; u.damage = 2; u.attack_speed = 1.0
+			u.is_healer = true; u.heal_amount = 8
+		"mamut":  # 8 many
+			u.hp = 300; u.max_hp = 300; u.damage = 22; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.death_explosion_radius = 50.0; u.death_explosion_damage = 35
 			u.set_meta("unit_type", "mamut")
-		"bronzovy_vojak":
-			u.hp = 90; u.max_hp = 90; u.damage = 12; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
-		"vojnovy_voz":
-			u.hp = 80; u.max_hp = 80; u.damage = 15; u.attack_speed = 0.8; u.attack_range = DEFAULT_MELEE_RANGE
+		"bronzovy_vojak":  # 4 many
+			u.hp = 120; u.max_hp = 120; u.damage = 13; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"vojnovy_voz":  # 7 many
+			u.hp = 180; u.max_hp = 180; u.damage = 16; u.attack_speed = 0.8; u.attack_range = DEFAULT_MELEE_RANGE
 			u.splash_radius = 15.0
 			u.set_meta("unit_type", "vojnovy_voz")
-		"lukostrelec":
-			u.hp = 50; u.max_hp = 50; u.damage = 18; u.attack_speed = 1.5
+		"lukostrelec":  # 5 many
+			u.hp = 80; u.max_hp = 80; u.damage = 20; u.attack_speed = 1.5
 			u.is_ranged = true; u.attack_range = 120.0; u.target_mode = Unit.TargetMode.LOWEST_HP
-		"faraon":
-			u.hp = 100; u.max_hp = 100; u.damage = 5; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
-			u.is_support = true; u.attack_speed_buff = 0.4
+		"faraon":  # 9 many
+			u.hp = 160; u.max_hp = 160; u.damage = 6; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
+			u.is_support = true; u.attack_speed_buff = 0.3
 			u.set_meta("unit_type", "faraon")
-		"legionar":
-			u.hp = 120; u.max_hp = 120; u.damage = 14; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"legionar":  # 5 many
+			u.hp = 150; u.max_hp = 150; u.damage = 15; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.formation_bonus = true
-		"balistar":
-			u.hp = 60; u.max_hp = 60; u.damage = 35; u.attack_speed = 3.0
+		"balistar":  # 8 many
+			u.hp = 100; u.max_hp = 100; u.damage = 38; u.attack_speed = 3.0
 			u.attack_range = 60.0; u.splash_radius = 20.0
-		"gladiator":
-			u.hp = 110; u.max_hp = 110; u.damage = 22; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"gladiator":  # 6 many
+			u.hp = 150; u.max_hp = 150; u.damage = 24; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.target_mode = Unit.TargetMode.HIGHEST_HP
-		"saboter":
-			u.hp = 70; u.max_hp = 70; u.damage = 10; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"saboter":  # 7 many
+			u.hp = 130; u.max_hp = 130; u.damage = 12; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.ignore_units = true
-		"rytier":
-			u.hp = 180; u.max_hp = 180; u.damage = 16; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
+		"rytier":  # 6 many
+			u.hp = 200; u.max_hp = 200; u.damage = 17; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
 			u.shield_percent = 0.5; u.shield_threshold = 0.5
-		"trebuchet":
-			u.hp = 50; u.max_hp = 50; u.damage = 50; u.attack_speed = 4.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"trebuchet":  # 9 many
+			u.hp = 80; u.max_hp = 80; u.damage = 45; u.attack_speed = 4.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.ignore_units = true; u.set_meta("unit_type", "trebuchet")
-		"mnich":
-			u.hp = 60; u.max_hp = 60; u.damage = 0; u.attack_speed = 1.0
-			u.is_healer = true; u.heal_amount = 15; u.target_mode = Unit.TargetMode.LOWEST_HP
-		"drak":
-			u.hp = 200; u.max_hp = 200; u.damage = 25; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
+		"mnich":  # 5 many
+			u.hp = 90; u.max_hp = 90; u.damage = 0; u.attack_speed = 1.0
+			u.is_healer = true; u.heal_amount = 18; u.target_mode = Unit.TargetMode.LOWEST_HP
+		"drak":  # 10 many
+			u.hp = 280; u.max_hp = 280; u.damage = 28; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
 			u.set_meta("unit_type", "drak")
-		"musketier":
-			u.hp = 70; u.max_hp = 70; u.damage = 28; u.attack_speed = 2.5
+		"musketier":  # 5 many
+			u.hp = 80; u.max_hp = 80; u.damage = 25; u.attack_speed = 2.5
 			u.is_ranged = true; u.attack_range = 700.0; u.attack_cooldown = 0.0
 			u.set_meta("unit_type", "musketier")
-		"parny_tank":
-			u.hp = 350; u.max_hp = 350; u.damage = 30; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
+		"parny_tank":  # 10 many
+			u.hp = 380; u.max_hp = 380; u.damage = 32; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
 			u.move_while_attacking = true; u.set_meta("unit_type", "parny_tank")
-		"inzinier":
-			u.hp = 80; u.max_hp = 80; u.damage = 5; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"inzinier":  # 7 many
+			u.hp = 120; u.max_hp = 120; u.damage = 6; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.attack_cooldown = 0.0; u.set_meta("unit_type", "inzinier")
-		"dynamiter":
-			u.hp = 60; u.max_hp = 60; u.damage = 5; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
-			u.death_explosion_radius = 60.0; u.death_explosion_damage = 80
-		"vojak_ww2":
-			u.hp = 100; u.max_hp = 100; u.damage = 20; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
-		"panzer":
-			u.hp = 400; u.max_hp = 400; u.damage = 40; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"dynamiter":  # 6 many
+			u.hp = 90; u.max_hp = 90; u.damage = 6; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.death_explosion_radius = 60.0; u.death_explosion_damage = 90
+		"vojak_ww2":  # 4 many
+			u.hp = 110; u.max_hp = 110; u.damage = 18; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+		"panzer":  # 10 many
+			u.hp = 380; u.max_hp = 380; u.damage = 35; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.move_while_attacking = true; u.set_meta("unit_type", "panzer")
-		"odstrelec":
-			u.hp = 55; u.max_hp = 55; u.damage = 60; u.attack_speed = 4.0
+		"odstrelec":  # 7 many
+			u.hp = 70; u.max_hp = 70; u.damage = 55; u.attack_speed = 4.0
 			u.is_ranged = true; u.attack_range = 200.0
 			u.target_mode = Unit.TargetMode.HIGHEST_HP; u.slow_on_hit = 1.0
 
@@ -482,6 +498,7 @@ func start_game():
 func reset_game():
 	units.clear(); barricades.clear(); projectiles.clear()
 	next_spawn_id = 1; game_started = false
+	card_cooldowns = {1: {}, 2: {}}
 	init_players()
 	print("✅ BattleManager: reset hotový")
 
@@ -502,7 +519,7 @@ func get_game_snapshot() -> Dictionary:
 			"speed": u.speed,
 			"is_support": u.is_support,
 			"is_ranged": u.is_ranged,
-			"just_fired": u.attack_cooldown >= u.base_attack_speed * 0.8,
+			"just_fired": u.attack_cooldown >= u.attack_speed * 0.8,
 			"unit_type": u.get_meta("unit_type", "jaskynny_muz")  
 		})
 	for b in barricades:
@@ -512,6 +529,7 @@ func get_game_snapshot() -> Dictionary:
 	for id in bases.keys():
 		snapshot["players"]["base_hp_%d" % id] = bases_hp[id]
 	snapshot["projectiles"] = projectiles.duplicate(true)
+	snapshot["card_cooldowns"] = card_cooldowns.duplicate(true)
 	return snapshot
 
 
@@ -551,4 +569,10 @@ var player_card_levels: Dictionary = {1: {}, 2: {}}
 
 func set_player_levels(player_id: int, levels: Dictionary):
 	player_card_levels[player_id] = levels
-	
+
+
+
+func tick_card_cooldowns():
+	for player_id in card_cooldowns.keys():
+		for card_id in card_cooldowns[player_id].keys():
+			card_cooldowns[player_id][card_id] = max(0.0, card_cooldowns[player_id][card_id] - TICK_RATE)

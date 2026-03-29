@@ -15,7 +15,8 @@ var opponent_name: String = ""
 var opponent_trophies: int = 0
 var supabase_updating := false
 var match_requested := false
-
+var player_label: Label
+var opponent_label: Label
 
 var projectile_nodes: Dictionary = {}
 var projectile_scene = preload("res://units/ProjectileNode.tscn")
@@ -46,6 +47,8 @@ func _ready():
 
 	socket.inbound_buffer_size = 65536 * 2
 	socket.outbound_buffer_size = 65536
+	_create_player_labels()
+	_create_mana_bar()
 
 
 func _process(_delta):
@@ -85,7 +88,19 @@ func _on_message(text: String):
 		var received_deck: Array = data.get("deck", [])
 		if received_deck.size() > 0:
 			Global.deck = received_deck
+		
+		if hrac == 1:
+		# Hráč 1 má základňu vľavo
+			player_label.position = Vector2(10, 10)
+			opponent_label.position = Vector2(1050, 10)
+		else:
+		# Hráč 2 má základňu vpravo
+			player_label.position = Vector2(1050, 10)
+			opponent_label.position = Vector2(10, 10)
+		player_label.text = "👤 " + Global.username
+		opponent_label.text = "💀 " + opponent_name
 		print("🎮 Som hráč: ", hrac, " | Súper: ", opponent_name, "| Deck: ", Global.deck)
+		_build_deck_buttons()
 
 	elif type == "waiting":
 		print("⏳ Čakám na súpera...")
@@ -99,29 +114,20 @@ func _on_message(text: String):
 		update_snapshot(snapshot_data)
 
 	elif type == "game_over":
-		supabase_updating = true
 		var won: bool = data.get("won", false)
-		game_started = false
-		if won:
-			print("🏆 Vyhral si! +30 trofejí")
-		else:
-			print("💀 Prehral si! -20 trofejí")
+		Global.last_match_won = won
+		Global.game_over_shown = true  # ← vždy true
 		await Supabase.update_after_match(Global.player_db_id, won)
-		supabase_updating = false
-		# Zobraz koleso
-		if won:
-			wheel_scene.show_wheel()
-			await get_tree().create_timer(1.0).timeout
-			wheel_scene.spin()
+		get_tree().change_scene_to_file("res://menu/startovascena.tscn")
 		set_process(false)
 
 
 func update_snapshot(snapshot: Dictionary):
 	last_snapshot = snapshot
 	var units_data: Array = snapshot.get("units", [])
-	# print("📦 Snapshot — počet jednotiek: ", units_data.size())
-	#for u in units_data:
-		#print("  unit: ", u)
+	#print("📦 Snapshot — počet jednotiek: ", units_data.size())
+	for u in units_data:
+		print("  unit: ", u)
 	var alive_ids := {}
 
 	for u in units_data:
@@ -162,6 +168,11 @@ func update_snapshot(snapshot: Dictionary):
 			projectile_nodes.erase(pid)
 	# print("🎯 Projektily v snapshote: ", projectiles_data.size())
 	queue_redraw()
+	var players_data = snapshot.get("players", {})
+	var my_mana = players_data.get(str(hrac), {}).get("mana", 0)
+	_update_mana_crystals(my_mana)
+	var my_cooldowns = snapshot.get("card_cooldowns", {}).get(str(hrac), {})
+	_update_card_cooldowns(my_cooldowns)
 
 
 func _spawn_unit_node(id: int, unit_data: Dictionary):
@@ -223,7 +234,6 @@ func client_ready():
 	print("📤 Hľadám súpera... Trofeje: ", Global.trophies, "Deck: ", Global.deck)
 
 func _build_deck_buttons():
-	# Nájdi kontajner kde sú tlačidlá (uprav cestu podľa tvojej scény)
 	var container = $DeckButtons
 	container.add_theme_constant_override("separation", 10)
 	container.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -236,21 +246,176 @@ func _build_deck_buttons():
 		if card_id == "":
 			continue
 		
-		var img_path = _get_card_image(card_id)
-		var btn = Button.new()
-		btn.custom_minimum_size = Vector2(150, 150)
-		btn.expand_icon = true
+		var wrapper = Control.new()
+		wrapper.custom_minimum_size = Vector2(150, 150)
+		wrapper.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		wrapper.set_meta("card_id", card_id)
 		
+		# Obrázok
+		var img_path = _get_card_image(card_id)
 		if img_path != "":
 			var tex = load(img_path)
 			if tex:
-				btn.icon = tex
+				var tr = TextureRect.new()
+				tr.texture = tex
+				tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+				tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				tr.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+				tr.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+				tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				wrapper.add_child(tr)
 		
-		btn.pressed.connect(func(): request_play_card(card_id))
-		container.add_child(btn)
+		# Cena — horný ľavý roh
+		var cost = Global.card_costs.get(card_id, 0)
+		var cost_label = Label.new()
+		cost_label.text = str(cost)
+		cost_label.position = Vector2(4, 4)
+		cost_label.z_index = 1
+		cost_label.add_theme_font_size_override("font_size", 13)
+		cost_label.add_theme_color_override("font_color", Color(1, 1, 1))
+		var cost_bg = StyleBoxFlat.new()
+		cost_bg.bg_color = Color(0.1, 0.3, 0.9, 0.95)
+		cost_bg.set_corner_radius_all(6)
+		cost_bg.content_margin_left = 5
+		cost_bg.content_margin_right = 5
+		cost_bg.content_margin_top = 2
+		cost_bg.content_margin_bottom = 2
+		cost_label.add_theme_stylebox_override("normal", cost_bg)
+		wrapper.add_child(cost_label)
+		
+		# Klik
+		wrapper.gui_input.connect(func(event):
+			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+				request_play_card(card_id)
+		)
+		container.add_child(wrapper)
 
 func _get_card_image(card_id: String) -> String:
 	for img_path in Global.card_image_to_id.keys():
 		if Global.card_image_to_id[img_path] == card_id:
 			return img_path
 	return ""
+	
+	
+func _create_player_labels():
+# --- PLAYER LABEL ---
+	player_label = Label.new()
+	player_label.position = Vector2(10, 10)
+	player_label.add_theme_font_size_override("font_size", 20)
+	player_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4))
+	
+	# Vytvorenie pozadia pre hráča
+	var player_bg = StyleBoxFlat.new()
+	player_bg.bg_color = Color(0.1, 0.1, 0.1, 0.8) # Tmavosivé farba s 80% viditeľnosťou
+	
+	# Pridanie vnútorného okraja (padding), aby text nebol nalepený na okraji pozadia
+	player_bg.content_margin_left = 10
+	player_bg.content_margin_right = 10
+	player_bg.content_margin_top = 5
+	player_bg.content_margin_bottom = 5
+	player_bg.set_corner_radius_all(15)
+	
+	# Aplikovanie pozadia na stav "normal"
+	player_label.add_theme_stylebox_override("normal", player_bg)
+	add_child(player_label)
+		
+	# --- OPPONENT LABEL ---
+	opponent_label = Label.new()
+	opponent_label.position = Vector2(1050, 10)
+	opponent_label.add_theme_font_size_override("font_size", 20)
+	opponent_label.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
+	
+	# Vytvorenie pozadia pre oponenta (môžeš použiť iné farby, ak chceš)
+	var opponent_bg = StyleBoxFlat.new()
+	opponent_bg.bg_color = Color(0.1, 0.1, 0.1, 0.8) 
+	opponent_bg.content_margin_left = 10
+	opponent_bg.content_margin_right = 10
+	opponent_bg.content_margin_top = 5
+	opponent_bg.content_margin_bottom = 5
+	opponent_bg.set_corner_radius_all(15)
+	
+	opponent_label.add_theme_stylebox_override("normal", opponent_bg)
+	add_child(opponent_label)
+	
+var mana_crystals: Array = []
+var current_mana: int = 0
+
+func _create_mana_bar():
+	var container = HBoxContainer.new()
+	container.position = Vector2(350, 10)  # ← hore
+	container.add_theme_constant_override("separation", 10)
+	add_child(container)
+	
+	for i in range(10):
+		var crystal = Panel.new()
+		crystal.custom_minimum_size = Vector2(45, 50)
+				
+		var style = StyleBoxFlat.new()
+		style.bg_color = Color(0.2, 0.2, 0.4, 0.8)
+				# Hexagon tvar cez skosené rohy
+		style.corner_radius_top_left = 12
+		style.corner_radius_top_right = 12
+		style.corner_radius_bottom_left = 12
+		style.corner_radius_bottom_right = 12
+		style.skew = Vector2(0.3, 0.0)  # skosenie = hexagon efekt
+		style.border_color = Color(0.4, 0.4, 0.8)
+		style.set_border_width_all(2)
+		crystal.add_theme_stylebox_override("panel", style)
+				
+		var label = Label.new()
+		label.text = str(i + 1)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		label.add_theme_font_size_override("font_size", 11)
+		label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.8))
+		crystal.add_child(label)
+				
+		container.add_child(crystal)
+		mana_crystals.append(crystal)
+
+func _update_mana_crystals(mana: int):
+
+
+	current_mana = mana
+	var mana_int = int(mana)
+	
+	for i in range(mana_crystals.size()):
+		var crystal = mana_crystals[i]
+		var style = StyleBoxFlat.new()
+		style.set_corner_radius_all(8)
+		style.set_border_width_all(2)
+
+		if i < mana:
+			style.bg_color = Color(0.3, 0.3, 1.0, 0.9)
+			style.border_color = Color(0.6, 0.6, 1.0)
+			style.skew = Vector2(0.3, 0.0)
+			crystal.get_child(0).add_theme_color_override("font_color", Color(1, 1, 1))
+		else:
+			style.bg_color = Color(0.2, 0.2, 0.4, 0.8)
+			style.border_color = Color(0.4, 0.4, 0.8)
+			style.skew = Vector2(0.3, 0.0)
+			crystal.get_child(0).add_theme_color_override("font_color", Color(0.5, 0.5, 0.8))
+		crystal.add_theme_stylebox_override("panel", style)
+
+func _update_card_cooldowns(cooldowns: Dictionary):
+	for wrapper in $DeckButtons.get_children():
+		var card_id = wrapper.get_meta("card_id", "")
+		var cd = cooldowns.get(card_id, 0.0)
+		if cd > 0.0:
+			wrapper.modulate = Color(0.5, 0.5, 0.5)
+			var cd_label = wrapper.get_node_or_null("CooldownLabel")
+			if cd_label == null:
+				cd_label = Label.new()
+				cd_label.name = "CooldownLabel"
+				cd_label.position = Vector2(20, 25)
+				cd_label.z_index = 2
+				cd_label.add_theme_font_size_override("font_size", 14)
+				cd_label.add_theme_color_override("font_color", Color(1, 1, 1))
+				wrapper.add_child(cd_label)
+			cd_label.text = "%.1fs" % cd
+		else:
+			wrapper.modulate = Color(1, 1, 1)
+			var cd_label = wrapper.get_node_or_null("CooldownLabel")
+			if cd_label:
+				cd_label.queue_free()
