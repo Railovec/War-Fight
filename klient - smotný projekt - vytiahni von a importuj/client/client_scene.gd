@@ -17,6 +17,7 @@ var supabase_updating := false
 var match_requested := false
 var player_label: Label
 var opponent_label: Label
+var unit_count_label: Label
 
 var projectile_nodes: Dictionary = {}
 var projectile_scene = preload("res://units/ProjectileNode.tscn")
@@ -173,7 +174,17 @@ func update_snapshot(snapshot: Dictionary):
 	_update_mana_crystals(my_mana)
 	var my_cooldowns = snapshot.get("card_cooldowns", {}).get(str(hrac), {})
 	_update_card_cooldowns(my_cooldowns)
-
+	
+	var my_units = snapshot.get("units", []).filter(func(u): return int(u.get("owner", 0)) == hrac)
+	var count = my_units.size()
+	if unit_count_label:
+		unit_count_label.text = "⚔️ %d/25" % count
+		if count >= 20:
+			unit_count_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # červená
+		elif count >= 15:
+			unit_count_label.add_theme_color_override("font_color", Color(1, 0.8, 0.0))  # žltá
+		else:
+			unit_count_label.add_theme_color_override("font_color", Color(1, 1, 1))  # biela
 
 func _spawn_unit_node(id: int, unit_data: Dictionary):
 	var node = unit_scene.instantiate()
@@ -373,6 +384,20 @@ func _create_mana_bar():
 				
 		container.add_child(crystal)
 		mana_crystals.append(crystal)
+		
+	unit_count_label = Label.new()
+	unit_count_label.position = Vector2(900, 15)
+	unit_count_label.add_theme_font_size_override("font_size", 16)
+	unit_count_label.add_theme_color_override("font_color", Color(1, 1, 1))
+	var bg = StyleBoxFlat.new()
+	bg.bg_color = Color(0.1, 0.1, 0.1, 0.8)
+	bg.set_corner_radius_all(8)
+	bg.content_margin_left = 8
+	bg.content_margin_right = 8
+	bg.content_margin_top = 3
+	bg.content_margin_bottom = 3
+	unit_count_label.add_theme_stylebox_override("normal", bg)
+	add_child(unit_count_label)
 
 func _update_mana_crystals(mana: int):
 
