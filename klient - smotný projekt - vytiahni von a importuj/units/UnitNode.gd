@@ -30,6 +30,8 @@ const UNIT_CONFIG = {
 	"faraon": {
 		"walk": {"file": "res://Card/Card_images/faraon_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 8},
 		"attack": {"file": "res://Card/Card_images/faraon_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
+		
+	
 	},
 }
 

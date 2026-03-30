@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bousgi7ch638"]
+[gd_scene load_steps=5 format=3 uid="uid://bousgi7ch638"]
 
 [ext_resource type="Script" uid="uid://driuxgqm80ff" path="res://UI/WheelScene.gd" id="1_r8xbl"]
 [ext_resource type="Texture2D" uid="uid://bpdxqv86yax8t" path="res://UI/arrow.png" id="3_26fei"]
-[ext_resource type="Texture2D" uid="uid://dcidf7n6xj7l0" path="res://zasranekoleso3.png" id="3_r8xbl"]
+[ext_resource type="Texture2D" uid="uid://dcidf7n6xj7l0" path="res://obrazky/zasranekoleso3.png" id="3_r8xbl"]
+[ext_resource type="AudioStream" uid="uid://nmw4rjcae0dc" path="res://hudba/freesound_community-wheel-spin-click-slow-down-101152 (1).ogg" id="4_fmo1r"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_r8xbl")
@@ -31,3 +32,7 @@ offset_top = 580.0
 offset_right = 676.0
 offset_bottom = 630.0
 size_flags_horizontal = 4
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_fmo1r")
+parameters/looping = true

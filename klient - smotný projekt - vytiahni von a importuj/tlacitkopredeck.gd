@@ -47,6 +47,7 @@ func _process(delta):
 #cize chill,a bude ukavat vsetky ,ma mozes timer zemenit za dvojkklik je to v E scripte
 
 func dvojklik():
+	Global.play_click()
 	var a = 0
 	jeuz=false
 	for child in get_children():
@@ -219,4 +220,5 @@ func _on_button_12_pressed():
 	$"../../../Timer".start()
 
 func _on_button_exit_pressed():
+	Global.play_click()
 	get_tree().change_scene_to_file("res://menu/startovascena.tscn")

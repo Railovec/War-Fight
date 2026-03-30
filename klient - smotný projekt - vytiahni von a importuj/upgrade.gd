@@ -240,6 +240,7 @@ func _select_card(card_id: String):
 	_update_doc(card_id)
 
 func _update_doc(card_id: String):
+	Global.play_click()
 	var doc = CARD_DOCS.get(card_id, {})
 	if doc.is_empty():
 		doc_label.text = ""
@@ -288,6 +289,7 @@ func _update_info_panel():
 	upgrade_btn.disabled = count < needed or Global.gold < gold_cost or not Global.owns_card(selected_card_id)
 
 func _on_upgrade_pressed():
+	Global.play_clickdva()
 	if selected_card_id == "":
 		return
 	var lvl = Global.card_levels.get(selected_card_id, 1)
@@ -316,4 +318,5 @@ func _get_card_image(card_id: String) -> String:
 	return ""
 
 func _on_back_button_pressed():
+	Global.play_click()
 	get_tree().change_scene_to_file("res://menu/startovascena.tscn")

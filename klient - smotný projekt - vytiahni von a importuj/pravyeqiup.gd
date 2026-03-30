@@ -49,9 +49,9 @@ func _on_button_10_pressed() -> void:
 	
 func _gui_input(event):
 	if event is InputEventMouseButton :
-		print("kokot")
+
 		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click and citlacitko== 1 :
-			print("kokot")
+
 			for child in tuknutetlacitko.get_children():
 				if child is TextureRect:
 					child.texture = null

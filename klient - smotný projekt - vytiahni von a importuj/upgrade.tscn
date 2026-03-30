@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://c34oup0tfu4g4"]
+[gd_scene load_steps=5 format=3 uid="uid://c34oup0tfu4g4"]
 
 [ext_resource type="Script" uid="uid://co24bs5pahsov" path="res://upgrade.gd" id="1_w52ek"]
+[ext_resource type="Texture2D" uid="uid://dim713oh3c72s" path="res://obrazky/bielebricky.png" id="2_50jy6"]
+[ext_resource type="Texture2D" uid="uid://d4kj3hger46lm" path="res://obrazky/pressed.webp" id="2_hj5gr"]
+[ext_resource type="Texture2D" uid="uid://dhjln6m0qtau1" path="res://obrazky/unpressed.webp" id="3_50jy6"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -9,13 +12,33 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_w52ek")
 
-[node name="BackButton" type="Button" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1146.0
+offset_bottom = 657.0
+texture = ExtResource("2_50jy6")
+stretch_mode = 1
+
+[node name="BackButton" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 911.0
 offset_top = 6.0
 offset_right = 1144.0
 offset_bottom = 87.0
-text = "BACK"
+texture_normal = ExtResource("2_hj5gr")
+texture_pressed = ExtResource("3_50jy6")
+
+[node name="Label" type="Label" parent="BackButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "back"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0

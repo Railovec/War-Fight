@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcidf7n6xj7l0"
-path="res://.godot/imported/zasranekoleso3.png-838cc74c97bff659128edb2c6f2a8e7b.ctex"
+uid="uid://d4kj3hger46lm"
+path="res://.godot/imported/pressed.webp-9ba8b87f38758687e2cb50830b99dd4d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://zasranekoleso3.png"
-dest_files=["res://.godot/imported/zasranekoleso3.png-838cc74c97bff659128edb2c6f2a8e7b.ctex"]
+source_file="res://obrazky/pressed.webp"
+dest_files=["res://.godot/imported/pressed.webp-9ba8b87f38758687e2cb50830b99dd4d.ctex"]
 
 [params]
 

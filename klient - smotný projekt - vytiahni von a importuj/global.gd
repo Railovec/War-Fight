@@ -16,6 +16,17 @@ var card_counts: Dictionary = {}  # card_id -> count
 var last_match_won: bool = false
 var game_over_shown: bool = false
  
+var click_player: AudioStreamPlayer
+var click_playerdva: AudioStreamPlayer
+
+
+
+func play_click():
+	click_player.play()
+	
+func play_clickdva():
+	click_playerdva.play()
+
 var deck: Array = ["", "", "", "", "", ""]  # 6 slotov, prázdne = nezaplnené
 
 # ci je postava odomknuta
@@ -57,6 +68,12 @@ func _ready():
 	# Ak je spustený ako druhá testovacia inštancia
 	if "--second" in OS.get_cmdline_args():
 		save_path = "user://save2.dat"
+	click_player = AudioStreamPlayer.new()
+	click_player.stream = preload("res://hudba/freesound-community-button-press-85188_5Av4hk9z.mp3")  # tvoja cesta
+	add_child(click_player)
+	click_playerdva = AudioStreamPlayer.new()
+	click_playerdva.stream = preload("res://hudba/levelup.mp3")  # tvoja cesta
+	add_child(click_playerdva)
 	
 	load_game()
 	

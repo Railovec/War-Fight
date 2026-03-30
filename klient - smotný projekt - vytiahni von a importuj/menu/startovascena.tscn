@@ -1,11 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvneotxrwwy5l"]
+[gd_scene load_steps=7 format=3 uid="uid://bvneotxrwwy5l"]
 
 [ext_resource type="Script" uid="uid://b6ukqbfqrdjow" path="res://menu/startovascena.gd" id="1_gx0ap"]
+[ext_resource type="Texture2D" uid="uid://dim713oh3c72s" path="res://obrazky/bielebricky.png" id="2_4wsk1"]
 [ext_resource type="PackedScene" uid="uid://bousgi7ch638" path="res://WheelScene.tscn" id="2_86ekx"]
+[ext_resource type="Texture2D" uid="uid://d4kj3hger46lm" path="res://obrazky/pressed.webp" id="2_pt6dy"]
+[ext_resource type="Texture2D" uid="uid://dhjln6m0qtau1" path="res://obrazky/unpressed.webp" id="3_4wsk1"]
 [ext_resource type="PackedScene" uid="uid://n8wicltio773" path="res://menu/game_over.tscn" id="3_v2okw"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_gx0ap")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1146.0
+offset_bottom = 657.0
+texture = ExtResource("2_4wsk1")
+stretch_mode = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -21,30 +30,86 @@ theme_override_constants/separation = 20
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="play" type="Button" parent="VBoxContainer2"]
+[node name="play" type="TextureButton" parent="VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
+texture_normal = ExtResource("2_pt6dy")
+texture_pressed = ExtResource("3_4wsk1")
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/play"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
 text = "play"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="upgrade" type="Button" parent="VBoxContainer2"]
+[node name="upgrade" type="TextureButton" parent="VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
+texture_normal = ExtResource("2_pt6dy")
+texture_pressed = ExtResource("3_4wsk1")
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/upgrade"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
 text = "upgrade"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="equip" type="Button" parent="VBoxContainer2"]
+[node name="equip" type="TextureButton" parent="VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
+texture_normal = ExtResource("2_pt6dy")
+texture_pressed = ExtResource("3_4wsk1")
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/equip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
 text = "equip"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="quit" type="Button" parent="VBoxContainer2"]
+[node name="quit" type="TextureButton" parent="VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
+texture_normal = ExtResource("2_pt6dy")
+texture_pressed = ExtResource("3_4wsk1")
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/quit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
 text = "quit"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-offset_left = 438.0
+offset_left = 517.0
 offset_top = 45.0
-offset_right = 1046.0
+offset_right = 1181.0
 offset_bottom = 578.0
 
 [node name="ArenaVbox" type="VBoxContainer" parent="ScrollContainer"]

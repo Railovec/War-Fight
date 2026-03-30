@@ -17,6 +17,7 @@ func show_result(won: bool):
 		$ContinueButton.text = "Späť do menu"
 
 func _on_continue_button_pressed():
+	Global.play_click()
 	visible = false
 	if player_won:
 		var wheel = get_parent().get_node("CanvasLayer")

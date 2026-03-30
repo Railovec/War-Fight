@@ -53,20 +53,28 @@ func _ready() -> void:
 
 
 func _on_button_pressed() -> void:
+	Global.play_click()
 	get_tree().change_scene_to_file("res://client/ClientScene.tscn")
 
+	
 
 func _on_upgrade_pressed() -> void:
+	Global.play_click()
 	get_tree().change_scene_to_file("res://upgrade.tscn")
 
+	
 
 func _on_equip_pressed() -> void:
+	Global.play_click()
 	get_tree().change_scene_to_file("res://scroll.tscn")
 
+	
 
 func _on_quit_pressed() -> void:
+	Global.play_click()
 	get_tree().quit()
 
+	
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
 	var name_input := new_text.strip_edges()

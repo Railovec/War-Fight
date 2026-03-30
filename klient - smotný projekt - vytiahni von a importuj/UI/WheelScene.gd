@@ -51,6 +51,7 @@ func show_wheel():
 func spin():
 	if is_spinning:
 		return
+	$AudioStreamPlayer2D.play()
 
 	is_spinning = true
 	result_label.visible = false
@@ -67,10 +68,11 @@ func spin():
 	spin_deceleration = 120.0
 
 
+
 func _process(delta):
 	if not is_spinning:
+		$AudioStreamPlayer2D.stop()
 		return
-
 	spin_speed = max(0.0, spin_speed - spin_deceleration * delta)
 
 	var next_rotation = current_rotation + spin_speed * delta

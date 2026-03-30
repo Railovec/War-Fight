@@ -9,6 +9,8 @@ func _gui_input(event):
 	if event is InputEventMouseButton :
 
 		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
+			Global.play_click()
+			
 
 			for child in self.get_children():
 				if child is TextureRect:
