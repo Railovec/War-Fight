@@ -1,6 +1,6 @@
 extends Button
 
-@onready var node_2d = $"../../../Node2D"
+@onready var node_2d = $"../../../Node2D/VBoxContainer"
 @onready var texture_rect = $TextureRect
 @onready var texture_rect2 = $"../Button2/TextureRect"
 @onready var texture_rect3 = $"../Button3/TextureRect"
@@ -16,6 +16,12 @@ extends Button
 @onready var texture_rect13= $"../Button13/TextureRect"
 @onready var texture_rect14= $"../Button14/TextureRect"
 @onready var texture_rect15= $"../Button15/TextureRect"
+@onready var texture_rect16= $"../Button16/TextureRect"
+@onready var texture_rect17= $"../Button17/TextureRect"
+@onready var texture_rect18= $"../Button18/TextureRect"
+@onready var texture_rect19= $"../Button19/TextureRect"
+@onready var texture_rect20= $"../Button20/TextureRect"
+
 @onready var grid_container = $"../../GridContainer"
 
 #zamykanie dam do globality pretoze ked budem hrat levly tam sa to ulozi...
@@ -81,6 +87,17 @@ func dvojklik():
 					zz = texture_rect13.texture
 				if but == 14:
 					zz = texture_rect14.texture
+				if but == 15:
+					zz = texture_rect15.texture
+				if but == 16:
+					zz = texture_rect16.texture
+				if but == 17:
+					zz = texture_rect17.texture
+				if but == 18:
+					zz = texture_rect18.texture
+				if but == 19:
+					zz = texture_rect19.texture
+					
 				if bok20.texture == zz:
 					jeuz=true
 				if bok20.texture != null:
@@ -222,3 +239,131 @@ func _on_button_12_pressed():
 func _on_button_exit_pressed():
 	Global.play_click()
 	get_tree().change_scene_to_file("res://menu/startovascena.tscn")
+
+
+func _on_button_13_pressed():
+	but = 13
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+	
+
+
+func _on_button_14_pressed():
+	but = 14
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_15_pressed() -> void:
+	but = 15
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_26_pressed() -> void:
+	but = 26
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_16_pressed() -> void:
+	but = 16
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+
+func _on_button_17_pressed() -> void:
+	but = 17
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_18_pressed() -> void:
+	but = 18
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_19_pressed() -> void:
+	but = 19
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_20_pressed() -> void:
+	but = 20
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_21_pressed() -> void:
+	but = 21
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_22_pressed() -> void:
+	but = 22
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_23_pressed() -> void:
+	but = 23
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_24_pressed() -> void:
+	but = 24
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()
+
+
+func _on_button_25_pressed() -> void:
+	but = 25
+	$"../../../Timer".stop()
+	if e == true:
+		dvojklik()
+	e = true
+	$"../../../Timer".start()

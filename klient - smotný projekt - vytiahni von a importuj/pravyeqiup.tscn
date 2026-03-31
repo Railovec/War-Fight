@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnaquye15h8o4"]
+[gd_scene load_steps=8 format=3 uid="uid://bnaquye15h8o4"]
 
 [ext_resource type="Script" uid="uid://dyusygoc273d1" path="res://pravyeqiup.gd" id="1_eyvko"]
 [ext_resource type="Script" uid="uid://dqyo3xikje3nk" path="res://tlacitkavdecku/tlacitkovdecku1.gd" id="2_7e6ba"]
@@ -7,147 +7,81 @@
 [ext_resource type="Script" uid="uid://s81mb68ru65" path="res://tlacitkavdecku/tlacitkovdecku4.gd" id="5_8ir5b"]
 [ext_resource type="Script" uid="uid://fo8owmjdrm56" path="res://tlacitkavdecku/tlacitkovdecku5.gd" id="6_2lul8"]
 [ext_resource type="Script" uid="uid://sgpqmhggwn5a" path="res://tlacitkavdecku/tlacitkovdecku6.gd" id="7_men1f"]
-[ext_resource type="Script" uid="uid://dpn7mr71o24j1" path="res://tlacitkavdecku/tlacitkovdecku7.gd" id="8_ji8ig"]
-[ext_resource type="Script" uid="uid://yuq24dla6iuh" path="res://tlacitkavdecku/tlacitkovdecku8.gd" id="9_idfqm"]
-[ext_resource type="Script" uid="uid://ddnkirhiuobvi" path="res://tlacitkavdecku/tlacitkovdecku9.gd" id="10_crgjy"]
-[ext_resource type="Script" uid="uid://dfm1iqqgglvg3" path="res://tlacitkavdecku/tlacitkovdecku10.gd" id="11_8yimo"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_eyvko")
 
-[node name="Button" type="Button" parent="."]
-offset_top = 22.5
-offset_right = 189.0
-offset_bottom = 211.5
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_top = 50.0
+offset_right = 150.0
+offset_bottom = 1000.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("2_7e6ba")
 
-[node name="TextureRect" type="TextureRect" parent="Button"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Button"]
 layout_mode = 1
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.6, 0.6)
 
-[node name="Button2" type="Button" parent="."]
-offset_top = 234.0
-offset_right = 189.0
-offset_bottom = 423.0
+[node name="Button2" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("3_ugief")
 
-[node name="TextureRect" type="TextureRect" parent="Button2"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Button2"]
 layout_mode = 1
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.6, 0.6)
 
-[node name="Button3" type="Button" parent="."]
-offset_top = 445.5
-offset_right = 189.0
-offset_bottom = 634.5
+[node name="Button3" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("4_emqci")
 
-[node name="TextureRect" type="TextureRect" parent="Button3"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Button3"]
 layout_mode = 1
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.6, 0.6)
 
-[node name="Button4" type="Button" parent="."]
-offset_top = 657.0
-offset_right = 189.0
-offset_bottom = 846.0
+[node name="Button4" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("5_8ir5b")
 
-[node name="TextureRect" type="TextureRect" parent="Button4"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Button4"]
 layout_mode = 1
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.6, 0.6)
 
-[node name="Button5" type="Button" parent="."]
-offset_top = 868.5
-offset_right = 189.0
-offset_bottom = 1057.5
+[node name="Button5" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("6_2lul8")
 
-[node name="TextureRect" type="TextureRect" parent="Button5"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Button5"]
 layout_mode = 1
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.6, 0.6)
 
-[node name="Button6" type="Button" parent="."]
-offset_left = 1700.0
-offset_top = 22.5
-offset_right = 1889.0
-offset_bottom = 211.5
+[node name="Button6" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("7_men1f")
 
-[node name="TextureRect" type="TextureRect" parent="Button6"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Button6"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.6, 0.6)
 
-[node name="Button7" type="Button" parent="."]
-offset_left = 1700.0
-offset_top = 234.0
-offset_right = 1889.0
-offset_bottom = 423.0
-script = ExtResource("8_ji8ig")
-
-[node name="TextureRect" type="TextureRect" parent="Button7"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Button8" type="Button" parent="."]
-offset_left = 1700.0
-offset_top = 445.5
-offset_right = 1889.0
-offset_bottom = 634.5
-script = ExtResource("9_idfqm")
-
-[node name="TextureRect" type="TextureRect" parent="Button8"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Button9" type="Button" parent="."]
-offset_left = 1700.0
-offset_top = 657.0
-offset_right = 1889.0
-offset_bottom = 846.0
-script = ExtResource("10_crgjy")
-
-[node name="TextureRect" type="TextureRect" parent="Button9"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Button10" type="Button" parent="."]
-offset_left = 1700.0
-offset_top = 868.5
-offset_right = 1889.0
-offset_bottom = 1057.5
-script = ExtResource("11_8yimo")
-
-[node name="TextureRect" type="TextureRect" parent="Button10"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
-[connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
-[connection signal="pressed" from="Button3" to="Button3" method="_on_pressed"]
-[connection signal="pressed" from="Button4" to="Button4" method="_on_pressed"]
-[connection signal="pressed" from="Button5" to="Button5" method="_on_pressed"]
-[connection signal="pressed" from="Button6" to="Button6" method="_on_pressed"]
-[connection signal="pressed" from="Button7" to="Button7" method="_on_pressed"]
-[connection signal="pressed" from="Button8" to="Button8" method="_on_pressed"]
-[connection signal="pressed" from="Button9" to="Button9" method="_on_pressed"]
-[connection signal="pressed" from="Button10" to="Button10" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button" to="VBoxContainer/Button" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="VBoxContainer/Button2" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button3" to="VBoxContainer/Button3" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button4" to="VBoxContainer/Button4" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button5" to="VBoxContainer/Button5" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button6" to="VBoxContainer/Button6" method="_on_pressed"]

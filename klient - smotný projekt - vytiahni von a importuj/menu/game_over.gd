@@ -6,15 +6,15 @@ func show_result(won: bool):
 	player_won = won  # ← ulož lokálne
 	visible = true
 	if won:
-		$VBoxContainer/ResultLabel.text = "VYHRAL SI! 🏆"
-		$VBoxContainer/ResultLabel.add_theme_color_override("font_color", Color(1.0, 0.85, 0.0))
-		$VBoxContainer/SubtitleLabel.text = "+30 trofejí"
-		$ContinueButton.text = "Točiť koleso! 🎰"
+		$HBoxContainer/VBoxContainer/ResultLabel.text = "VYHRAL SI! 🏆"
+		$HBoxContainer/VBoxContainer/ResultLabel.add_theme_color_override("font_color", Color(1.0, 0.85, 0.0))
+		$HBoxContainer/VBoxContainer/SubtitleLabel.text = "+30 trofejí"
+		$ContinueButton/Label.text = "Točiť koleso! 🎰"
 	else:
-		$VBoxContainer/ResultLabel.text = "PREHRAL SI! 💀"
-		$VBoxContainer/ResultLabel.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
-		$VBoxContainer/SubtitleLabel.text = "-20 trofejí"
-		$ContinueButton.text = "Späť do menu"
+		$HBoxContainer/VBoxContainer/ResultLabel.text = "PREHRAL SI! 💀"
+		$HBoxContainer/VBoxContainer/ResultLabel.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
+		$HBoxContainer/VBoxContainer/SubtitleLabel.text = "-20 trofejí"
+		$ContinueButton/Label.text = "Späť do menu"
 
 func _on_continue_button_pressed():
 	Global.play_click()

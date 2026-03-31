@@ -9,7 +9,7 @@ extends Node2D
 
 const ARENAS = [
 	{"name": "Kamenná doba", "min": 0, "max": 299,
-	 "cards": ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut"],
+	 "cards": ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut", "spawn_faklar", "spawn_jaskynny_strelec"],
 	 "color": Color(0.8, 0.6, 0.3)},
 	{"name": "Bronzová doba", "min": 300, "max": 599,
 	 "cards": ["spawn_bronzovy_vojak", "spawn_vojnovy_voz", "spawn_lukostrelec", "spawn_faraon"],

@@ -34,7 +34,7 @@ func login(uuid: String, username: String) -> Dictionary:
 
 	if created.size() > 0:
 		print("✅ Nový hráč vytvorený: ", username)
-		var starter_cards = ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut"]
+		var starter_cards = ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut", "spawn_jaskynny_strekec", "spawn_faklar"]
 		for card_id in starter_cards:
 			await add_card(uuid, card_id)
 		return created[0]

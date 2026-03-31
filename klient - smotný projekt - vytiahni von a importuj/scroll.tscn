@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://ds3o2yvj2qtgi"]
+[gd_scene load_steps=23 format=3 uid="uid://ds3o2yvj2qtgi"]
 
 [ext_resource type="Script" uid="uid://couce7812ux7d" path="res://tlacitkopredeck.gd" id="1_11rd4"]
-[ext_resource type="Texture2D" uid="uid://dim713oh3c72s" path="res://obrazky/bielebricky.png" id="1_uf85w"]
+[ext_resource type="Texture2D" uid="uid://2hsertctfgtd" path="res://menu/BG_pattern.png" id="1_n6kl4"]
 [ext_resource type="PackedScene" uid="uid://bnaquye15h8o4" path="res://pravyeqiup.tscn" id="2_hmjxn"]
 [ext_resource type="Texture2D" uid="uid://doxd0ff8vo1x8" path="res://Card/Card_profile_picture/musketier_profile.png" id="2_rlle2"]
 [ext_resource type="Texture2D" uid="uid://kgi2u4dd4h1c" path="res://Card/Card_profile_picture/jaskynny_muz_profile.png" id="3_aiko0"]
@@ -10,6 +10,17 @@
 [ext_resource type="Texture2D" uid="uid://dboyid4odwvbc" path="res://Card/Card_profile_picture/faraon_profile.png" id="6_11rd4"]
 [ext_resource type="Texture2D" uid="uid://d4kj3hger46lm" path="res://obrazky/pressed.webp" id="7_x0hcb"]
 [ext_resource type="Texture2D" uid="uid://dhjln6m0qtau1" path="res://obrazky/unpressed.webp" id="8_uf85w"]
+[ext_resource type="Texture2D" uid="uid://mkax5jkbwqng" path="res://Card/Card_profile_picture/gladiator_profile.png" id="8_w7pop"]
+[ext_resource type="Texture2D" uid="uid://usp6t2ewct7" path="res://Card/Card_profile_picture/falkar_profile.png" id="9_kduow"]
+[ext_resource type="Texture2D" uid="uid://cs82crqg8la46" path="res://Card/Card_profile_picture/jaskynny_strelec_profile.png" id="10_tf377"]
+[ext_resource type="Texture2D" uid="uid://bs3ftdg80lcop" path="res://Card/Card_profile_picture/mnich_profile.png" id="11_hd1rn"]
+[ext_resource type="Texture2D" uid="uid://clf01bmey4di6" path="res://Card/Card_profile_picture/lukostrelec.png" id="12_o2yn8"]
+[ext_resource type="Texture2D" uid="uid://dfs87w2l25tf8" path="res://Card/Card_profile_picture/inzinier_profile.png" id="13_hd1rn"]
+[ext_resource type="Texture2D" uid="uid://dsmdoje45d371" path="res://Card/Card_profile_picture/dynamiter_profile.png" id="14_o2yn8"]
+[ext_resource type="Texture2D" uid="uid://dcnip8ywxikpu" path="res://Card/Card_profile_picture/lovec_profile.png" id="15_kpvlf"]
+[ext_resource type="Texture2D" uid="uid://bljymhq4reink" path="res://Card/Card_profile_picture/vojak_ww2_profile.png" id="16_n6kl4"]
+[ext_resource type="Texture2D" uid="uid://c1hc2362c45gh" path="res://Card/Card_profile_picture/bronzovy_vojak_profile.png" id="17_kjo21"]
+[ext_resource type="Texture2D" uid="uid://c2ugr5d1t4t06" path="res://Card/Card_profile_picture/rytier_profile.png" id="18_kjo21"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3fd8"]
 bg_color = Color(0, 0, 0, 1)
@@ -20,9 +31,10 @@ anchors_preset = 0
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 2065.0
-offset_bottom = 1171.0
-texture = ExtResource("1_uf85w")
+offset_left = -17.0
+offset_right = 1913.0
+offset_bottom = 1088.0
+texture = ExtResource("1_n6kl4")
 stretch_mode = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -102,8 +114,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 61.0
+offset_bottom = 61.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("8_w7pop")
 
 [node name="Button7" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -111,11 +127,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button7"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("9_kduow")
 
 [node name="Button8" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -123,11 +138,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button8"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_tf377")
 
 [node name="Button9" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -135,11 +149,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button9"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("11_hd1rn")
 
 [node name="Button10" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -147,11 +160,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button10"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("12_o2yn8")
 
 [node name="Button11" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -159,11 +171,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button11"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("13_hd1rn")
 
 [node name="Button12" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -171,11 +182,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button12"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("14_o2yn8")
 
 [node name="Button13" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -183,11 +193,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button13"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("15_kpvlf")
 
 [node name="Button14" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -195,11 +204,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button14"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("16_n6kl4")
 
 [node name="Button15" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -207,11 +215,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button15"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("17_kjo21")
 
 [node name="Button16" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -219,11 +226,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button16"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("18_kjo21")
 
 [node name="Button17" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -588,30 +594,33 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_k3fd8")
 
 [node name="Button_exit" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 1261.0
-offset_top = 23.0
-offset_right = 1535.0
-offset_bottom = 133.0
+offset_left = 1615.0
+offset_top = 11.0
+offset_right = 1889.0
+offset_bottom = 121.0
 texture_normal = ExtResource("7_x0hcb")
 texture_pressed = ExtResource("8_uf85w")
 stretch_mode = 0
 
 [node name="Label" type="Label" parent="Button_exit"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = -1
+anchor_left = 0.007299242
+anchor_right = 1.0072993
+anchor_bottom = 1.0000001
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 50
 text = "back"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.4
 
 [node name="Node2D" parent="." instance=ExtResource("2_hmjxn")]
+position = Vector2(20, 0)
 
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button" to="ScrollContainer/GridContainer/Button" method="_on_pressed"]
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button2" to="ScrollContainer/GridContainer/Button" method="_on_button_2_pressed"]
@@ -625,5 +634,19 @@ wait_time = 0.4
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button10" to="ScrollContainer/GridContainer/Button" method="_on_button_10_pressed"]
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button11" to="ScrollContainer/GridContainer/Button" method="_on_button_11_pressed"]
 [connection signal="pressed" from="ScrollContainer/GridContainer/Button12" to="ScrollContainer/GridContainer/Button" method="_on_button_12_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button13" to="ScrollContainer/GridContainer/Button" method="_on_button_13_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button14" to="ScrollContainer/GridContainer/Button" method="_on_button_14_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button15" to="ScrollContainer/GridContainer/Button" method="_on_button_15_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button16" to="ScrollContainer/GridContainer/Button" method="_on_button_16_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button17" to="ScrollContainer/GridContainer/Button" method="_on_button_17_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button18" to="ScrollContainer/GridContainer/Button" method="_on_button_18_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button19" to="ScrollContainer/GridContainer/Button" method="_on_button_19_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button20" to="ScrollContainer/GridContainer/Button" method="_on_button_20_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button21" to="ScrollContainer/GridContainer/Button" method="_on_button_21_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button22" to="ScrollContainer/GridContainer/Button" method="_on_button_22_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button23" to="ScrollContainer/GridContainer/Button" method="_on_button_23_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button24" to="ScrollContainer/GridContainer/Button" method="_on_button_24_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button25" to="ScrollContainer/GridContainer/Button" method="_on_button_25_pressed"]
+[connection signal="pressed" from="ScrollContainer/GridContainer/Button26" to="ScrollContainer/GridContainer/Button" method="_on_button_26_pressed"]
 [connection signal="pressed" from="Button_exit" to="ScrollContainer/GridContainer/Button" method="_on_button_exit_pressed"]
 [connection signal="timeout" from="Timer" to="ScrollContainer/GridContainer/Button" method="_on_timer_timeout"]

@@ -11,27 +11,245 @@ var unit_type: String = "jaskynny_muz"
 # Konfigurácia každej jednotky
 const UNIT_CONFIG = {
 	"jaskynny_muz": {
-		"walk": {"file": "res://Card/Card_images/jaskynny_muz_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 8},
-		"attack": {"file": "res://Card/Card_images/jaskynny_muz_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
+		"walk": {
+			"file": "res://Card/Card_images/jaskynny_muz_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/jaskynny_muz_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
 	},
 	"musketier": {
 		"walk": {"file": "res://Card/Card_images/musketier_idle.png", "frames": 5, "cols": 5, "rows": 1, "fps": 6},
 		"attack": {"file": "res://Card/Card_images/musketier_attack.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
 	},
 	"mamut": {
-		"walk": {"file": "res://Card/Card_images/mamut_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 6},
-		"attack": {"file": "res://Card/Card_images/mamut_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 8},
-		"death": {"file": "res://Card/Card_images/mamut_death.png", "frames": 2, "cols": 2, "rows": 1, "fps": 6},
+		"walk": {
+			"file": "res://Card/Card_images/mamut_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/mamut_hit.png",
+			"frames": 25,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"death": {
+			"file": "res://Card/Card_images/mamut_death.png", 
+			"frames": 29, 
+			"cols": 4, 
+			"rows": 8, 
+			"fps": 20
+		},
 	},
 	"vojnovy_voz": {
 		"walk": {"file": "res://Card/Card_images/vojnovy_voz_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 8},
 		"attack": {"file": "res://Card/Card_images/vojnovy_voz_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
 	},
 	"faraon": {
-		"walk": {"file": "res://Card/Card_images/faraon_walk.png", "frames": 5, "cols": 5, "rows": 1, "fps": 8},
-		"attack": {"file": "res://Card/Card_images/faraon_hit.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
+		"walk": {
+			"file": "res://Card/Card_images/faraon_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/faraon_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"gladiator": {
+		"walk": {
+			"file": "res://Card/Card_images/gladiator_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/gladiator_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"faklar": {
+		"walk": {
+			"file": "res://Card/Card_images/faklar_walk.png",
+			"frames": 21,   # 4 × 7
+			"cols": 4,
+			"rows": 5,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/faklar_hit.png",
+			"frames": 28,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"jaskynny_strelec": {
+		"walk": {
+			"file": "res://Card/Card_images/jaskynny_strelec_walk.png",
+			"frames": 25,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/jaskynny_strelec_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
 		
 	
+	},
+	"mnich": {
+		"walk": {
+			"file": "res://Card/Card_images/mnich_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/mnich_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"lukostrelec": {
+		"walk": {
+			"file": "res://Card/Card_images/lukostrelec_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/lukostrelec_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"inzinier": {
+		"walk": {
+			"file": "res://Card/Card_images/inzinier_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/inzinier_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"dynamiter": {
+		"walk": {
+			"file": "res://Card/Card_images/dynamiter_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/dynamiter_hit.png",
+			"frames": 20,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 5,
+			"fps": 20
+		},
+	},
+	"lovec": {
+		"walk": {
+			"file": "res://Card/Card_images/lovec_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/lovec_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"vojak_ww2": {
+		"walk": {
+			"file": "res://Card/Card_images/vojak_ww2_walk.png",
+			"frames": 21,   # 4 × 7
+			"cols": 4,
+			"rows": 6,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/vojak_ww2_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"bronzovy_vojak": {
+		"walk": {
+			"file": "res://Card/Card_images/bronzovy_vojak_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/bronzovy_vojak_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"rytier": {
+		"walk": {
+			"file": "res://Card/Card_images/rytier_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/rytier_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
 	},
 }
 
@@ -63,12 +281,18 @@ func _setup_animations():
 			var img_size = tex.get_size()
 			var fw = img_size.x / anim["cols"]
 			var fh = img_size.y / anim["rows"]
+			var frame_count = 0
 			for row in range(anim["rows"]):
 				for col in range(anim["cols"]):
+					if frame_count >= anim["frames"]:  # ← zastav keď máš dosť
+						break
 					var atlas = AtlasTexture.new()
 					atlas.atlas = tex
 					atlas.region = Rect2(col * fw, row * fh, fw, fh)
 					frames.add_frame(anim_name, atlas)
+					frame_count += 1
+				if frame_count >= anim["frames"]:
+					break
 
 	sprite.sprite_frames = frames
 	sprite.scale = Vector2(0.5, 0.5)

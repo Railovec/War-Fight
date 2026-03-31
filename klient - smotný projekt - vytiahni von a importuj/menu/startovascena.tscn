@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bvneotxrwwy5l"]
 
 [ext_resource type="Script" uid="uid://b6ukqbfqrdjow" path="res://menu/startovascena.gd" id="1_gx0ap"]
-[ext_resource type="Texture2D" uid="uid://dim713oh3c72s" path="res://obrazky/bielebricky.png" id="2_4wsk1"]
+[ext_resource type="Texture2D" uid="uid://2hsertctfgtd" path="res://menu/BG_pattern.png" id="2_4wsk1"]
 [ext_resource type="PackedScene" uid="uid://bousgi7ch638" path="res://WheelScene.tscn" id="2_86ekx"]
 [ext_resource type="Texture2D" uid="uid://d4kj3hger46lm" path="res://obrazky/pressed.webp" id="2_pt6dy"]
 [ext_resource type="Texture2D" uid="uid://dhjln6m0qtau1" path="res://obrazky/unpressed.webp" id="3_4wsk1"]
@@ -11,8 +11,8 @@
 script = ExtResource("1_gx0ap")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 1146.0
-offset_bottom = 657.0
+offset_right = 1153.0
+offset_bottom = 643.0
 texture = ExtResource("2_4wsk1")
 stretch_mode = 1
 
@@ -108,8 +108,8 @@ vertical_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 offset_left = 517.0
-offset_top = 45.0
-offset_right = 1181.0
+offset_top = 51.0
+offset_right = 1144.0
 offset_bottom = 578.0
 
 [node name="ArenaVbox" type="VBoxContainer" parent="ScrollContainer"]

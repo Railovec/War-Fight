@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c34oup0tfu4g4"]
 
 [ext_resource type="Script" uid="uid://co24bs5pahsov" path="res://upgrade.gd" id="1_w52ek"]
-[ext_resource type="Texture2D" uid="uid://dim713oh3c72s" path="res://obrazky/bielebricky.png" id="2_50jy6"]
+[ext_resource type="Texture2D" uid="uid://2hsertctfgtd" path="res://menu/BG_pattern.png" id="2_50jy6"]
 [ext_resource type="Texture2D" uid="uid://d4kj3hger46lm" path="res://obrazky/pressed.webp" id="2_hj5gr"]
 [ext_resource type="Texture2D" uid="uid://dhjln6m0qtau1" path="res://obrazky/unpressed.webp" id="3_50jy6"]
 

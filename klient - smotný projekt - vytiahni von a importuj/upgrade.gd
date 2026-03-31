@@ -12,7 +12,7 @@ var selected_card_id: String = ""
 var doc_label: RichTextLabel
 
 const ERAS = {
-	"Kamenná": ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut"],
+	"Kamenná": ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut", "spawn_jaskynny_strekec", "spawn_faklar"],
 	"Bronzová": ["spawn_bronzovy_vojak", "spawn_vojnovy_voz", "spawn_lukostrelec", "spawn_faraon"],
 	"Železná": ["spawn_legionar", "spawn_balistar", "spawn_gladiator", "spawn_saboter"],
 	"Stredovek": ["spawn_rytier", "spawn_trebuchet", "spawn_mnich", "spawn_drak"],
@@ -44,6 +44,20 @@ const CARD_DOCS = {
 		"hp": 300, "dmg": 22, "speed": 0.5, "attack_speed": "2.0s", "range": "Melee", "cost": 8,
 		"mechanic": "Pri smrti exploduje — dá 35 DMG všetkým nepriateľom v dosahu 50px.",
 		"tip": "Pošli ho priamo do zhluku nepriateľov. Výbuch pri death je reward."
+	},
+	"spawn_faklar": {
+		"name": "Fakľar", "era": "Kamenná doba",
+		"hp": 110, "dmg": 12, "speed": 1.2, "attack_speed": "1.0s",
+		"range": "Melee", "cost": 7,
+		"mechanic": "Pri každom útoku zapáli nepriateľa — cieľ horí 3 sekundy a stráca 5 HP za tik. Oheň sa nedá stackovať.",
+		"tip": "Kombinuj s pomalými tankami — burn robí damage kým tank drží nepriateľa na mieste."
+	},
+	"spawn_jaskynny_strelec": {
+		"name": "Jaskynný strelec", "era": "Kamenná doba",
+		"hp": 70, "dmg": 16, "speed": 0.0, "attack_speed": "1.5s",
+		"range": "100px", "cost": 4,
+		"mechanic": "Stojí na mieste a útočí prakom na diaľku. Prvý výstrel má nulový cooldown — útočí okamžite po spawnovaní.",
+		"tip": "Lacný ranged damage. Daj za frontovú líniu — jaskynný muž ho ochráni."
 	},
 	"spawn_bronzovy_vojak": {
 		"name": "Bronzový vojak", "era": "Bronzová doba",

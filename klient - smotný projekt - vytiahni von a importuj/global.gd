@@ -37,6 +37,26 @@ var postavy = {
 	"res://Card/Card_profile_picture/mamut_profile.png": true,
 	"res://Card/Card_profile_picture/vojnovy_voz_profile.png": true,
 	"res://Card/Card_profile_picture/faraon_profile.png": true,
+	"res://Card/Card_profile_picture/gladiator_profile.png": true,
+	"res://Card/Card_profile_picture/falkar_profile.png": true,
+	"res://Card/Card_profile_picture/jaskynny_strelec_profile.png": true,
+	"res://Card/Card_profile_picture/mnich_profile.png": true,
+	"res://Card/Card_profile_picture/lukostrelec.png": true,
+	"res://Card/Card_profile_picture/inzinier_profile.png": true,
+	"res://Card/Card_profile_picture/dynamiter_profile.png": true,
+	"res://Card/Card_profile_picture/lovec_profile.png": true,
+	"res://Card/Card_profile_picture/vojak_ww2_profile.png": true,
+	"res://Card/Card_profile_picture/bronzovy_vojak_profile.png": true,
+	"res://Card/Card_profile_picture/rytier_profile.png": true,
+	
+	
+	
+	
+	
+	
+
+	
+	
 	
 	
 	
@@ -49,13 +69,31 @@ var card_image_to_id = {
 	"res://Card/Card_profile_picture/mamut_profile.png": "spawn_mamut",
 	"res://Card/Card_profile_picture/vojnovy_voz_profile.png": "spawn_vojnovy_voz",
 	"res://Card/Card_profile_picture/faraon_profile.png": "spawn_faraon",
+	"res://Card/Card_profile_picture/gladiator_profile.png": "spawn_gladiator",
+	"res://Card/Card_profile_picture/falkar_profile.png": "spawn_faklar",
+	"res://Card/Card_profile_picture/jaskynny_strelec_profile.png": "spawn_jaskynny_strekec",
+	"res://Card/Card_profile_picture/mnich_profile.png": "spawn_mnich",
+	"res://Card/Card_profile_picture/lukostrelec.png": "spawn_lukostrelec",
+	"res://Card/Card_profile_picture/inzinier_profile.png": "spawn_inzinier",
+	"res://Card/Card_profile_picture/dynamiter_profile.png": "spawn_dynamiter",
+	"res://Card/Card_profile_picture/lovec_profile.png": "spawn_lovec",
+	"res://Card/Card_profile_picture/vojak_ww2_profile.png": "spawn_vojak_ww2",
+	"res://Card/Card_profile_picture/bronzovy_vojak_profile.png": "spawn_bronzovy_vojak",
+	"res://Card/Card_profile_picture/rytier_profile.png": "spawn_rytier"
 	
-}
+	
+	
+	
+	
+	
+	
+	}
+	
 
 var save_path = "user://save.dat"
  
 var card_costs = {
-	"spawn_jaskynny_muz": 3, "spawn_lovec": 4, "spawn_saman": 6, "spawn_mamut": 8,
+	"spawn_jaskynny_muz": 3, "spawn_lovec": 4, "spawn_saman": 6, "spawn_mamut": 8, "spawn_faklar": 7, "spawn_jaskynny_strekec": 4, 
 	"spawn_bronzovy_vojak": 4, "spawn_vojnovy_voz": 7, "spawn_lukostrelec": 5, "spawn_faraon": 9,
 	"spawn_legionar": 5, "spawn_balistar": 8, "spawn_gladiator": 6, "spawn_saboter": 7,
 	"spawn_rytier": 6, "spawn_trebuchet": 9, "spawn_mnich": 5, "spawn_drak": 10,
