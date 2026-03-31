@@ -44,6 +44,7 @@ func tick():
 	apply_buffs()
 	apply_formation_bonuses()
 	tick_slow_timers()
+	tick_burn()
 	tick_healers()
 	tick_engineer_barricades()
 	move_units()
@@ -102,6 +103,18 @@ func tick_slow_timers():
 		u.slow_timer = max(0.0, u.slow_timer - TICK_RATE)
 		if u.slow_timer <= 0.0 and u.base_speed > 0.0:
 			u.speed = u.base_speed
+
+
+func tick_burn():
+	for u in units:
+		if u.burn_timer <= 0.0:
+			continue
+		u.burn_timer = max(0.0, u.burn_timer - TICK_RATE)
+		u.burn_tick_cooldown = max(0.0, u.burn_tick_cooldown - TICK_RATE)
+		if u.burn_tick_cooldown <= 0.0:
+			u.hp -= u.burn_damage
+			u.burn_tick_cooldown = 1.0
+			print("🔥 Burn DMG na unit ", u.spawn_id, " — HP: ", u.hp)
 
 
 func tick_healers():
@@ -243,6 +256,11 @@ func _do_attack(attacker: Unit, primary_target: Unit):
 		print("Unit ", attacker.spawn_id, " -> ", primary_target.spawn_id, " DMG: ", dealt, " HP: ", primary_target.hp)
 	if attacker.slow_on_hit > 0.0:
 		primary_target.apply_slow(attacker.slow_on_hit)
+	if attacker.burn_on_hit:
+		if primary_target.burn_timer <= 0.0:
+			primary_target.burn_timer = 3.0
+			primary_target.burn_tick_cooldown = 1.0
+			print("🔥 Fakľar zapálil unit ", primary_target.spawn_id)
 	if attacker.has_meta("unit_type") and attacker.get_meta("unit_type") == "panzer":
 		for u in units:
 			if u.owner_id != attacker.owner_id and abs(u.position - attacker.position) <= 5.0:
@@ -398,15 +416,27 @@ func spawn_unit(owner_id: int, card) -> Unit:
 		"lovec":  # 4 many
 			u.hp = 80; u.max_hp = 80; u.damage = 14; u.attack_speed = 1.2
 			u.is_ranged = true; u.attack_range = 80.0
+			u.set_meta("unit_type", "lovec")
 		"saman":  # 6 many
 			u.hp = 100; u.max_hp = 100; u.damage = 2; u.attack_speed = 1.0
 			u.is_healer = true; u.heal_amount = 8
+			u.set_meta("unit_type", "saman")
 		"mamut":  # 8 many
 			u.hp = 300; u.max_hp = 300; u.damage = 22; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.death_explosion_radius = 50.0; u.death_explosion_damage = 35
 			u.set_meta("unit_type", "mamut")
+		"faklar":  # 7 many
+			u.hp = 110; u.max_hp = 110; u.damage = 12; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.burn_on_hit = true
+			u.set_meta("unit_type", "faklar")
+		"jaskynny_strelec":  # 4 many
+			u.hp = 70; u.max_hp = 70; u.damage = 16; u.attack_speed = 1.5
+			u.is_ranged = true; u.attack_range = 100.0
+			u.attack_cooldown = 0.0  # prvý výstrel okamžite
+			u.set_meta("unit_type", "jaskynny_strelec")
 		"bronzovy_vojak":  # 4 many
 			u.hp = 120; u.max_hp = 120; u.damage = 13; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.set_meta("unit_type", "bronzovy_vojak")
 		"vojnovy_voz":  # 7 many
 			u.hp = 180; u.max_hp = 180; u.damage = 16; u.attack_speed = 0.8; u.attack_range = DEFAULT_MELEE_RANGE
 			u.splash_radius = 15.0
@@ -414,6 +444,7 @@ func spawn_unit(owner_id: int, card) -> Unit:
 		"lukostrelec":  # 5 many
 			u.hp = 80; u.max_hp = 80; u.damage = 20; u.attack_speed = 1.5
 			u.is_ranged = true; u.attack_range = 120.0; u.target_mode = Unit.TargetMode.LOWEST_HP
+			u.set_meta("unit_type", "lukostrelec")
 		"faraon":  # 9 many
 			u.hp = 160; u.max_hp = 160; u.damage = 6; u.attack_speed = 1.5; u.attack_range = DEFAULT_MELEE_RANGE
 			u.is_support = true; u.attack_speed_buff = 0.3
@@ -421,24 +452,30 @@ func spawn_unit(owner_id: int, card) -> Unit:
 		"legionar":  # 5 many
 			u.hp = 150; u.max_hp = 150; u.damage = 15; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.formation_bonus = true
+			u.set_meta("unit_type", "legionar")
 		"balistar":  # 8 many
 			u.hp = 100; u.max_hp = 100; u.damage = 38; u.attack_speed = 3.0
 			u.attack_range = 60.0; u.splash_radius = 20.0
+			u.set_meta("unit_type", "balistar")
 		"gladiator":  # 6 many
 			u.hp = 150; u.max_hp = 150; u.damage = 24; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.target_mode = Unit.TargetMode.HIGHEST_HP
+			u.set_meta("unit_type", "gladiator")
 		"saboter":  # 7 many
 			u.hp = 130; u.max_hp = 130; u.damage = 12; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.ignore_units = true
+			u.set_meta("unit_type", "saboter")
 		"rytier":  # 6 many
 			u.hp = 200; u.max_hp = 200; u.damage = 17; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
 			u.shield_percent = 0.5; u.shield_threshold = 0.5
+			u.set_meta("unit_type", "rytier")
 		"trebuchet":  # 9 many
 			u.hp = 80; u.max_hp = 80; u.damage = 45; u.attack_speed = 4.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.ignore_units = true; u.set_meta("unit_type", "trebuchet")
 		"mnich":  # 5 many
 			u.hp = 90; u.max_hp = 90; u.damage = 0; u.attack_speed = 1.0
 			u.is_healer = true; u.heal_amount = 18; u.target_mode = Unit.TargetMode.LOWEST_HP
+			u.set_meta("unit_type", "mnich")
 		"drak":  # 10 many
 			u.hp = 280; u.max_hp = 280; u.damage = 28; u.attack_speed = 1.2; u.attack_range = DEFAULT_MELEE_RANGE
 			u.set_meta("unit_type", "drak")
@@ -455,8 +492,10 @@ func spawn_unit(owner_id: int, card) -> Unit:
 		"dynamiter":  # 6 many
 			u.hp = 90; u.max_hp = 90; u.damage = 6; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.death_explosion_radius = 60.0; u.death_explosion_damage = 90
+			u.set_meta("unit_type", "dynamiter")
 		"vojak_ww2":  # 4 many
 			u.hp = 110; u.max_hp = 110; u.damage = 18; u.attack_speed = 1.0; u.attack_range = DEFAULT_MELEE_RANGE
+			u.set_meta("unit_type", "vojak_ww2")
 		"panzer":  # 10 many
 			u.hp = 380; u.max_hp = 380; u.damage = 35; u.attack_speed = 2.0; u.attack_range = DEFAULT_MELEE_RANGE
 			u.move_while_attacking = true; u.set_meta("unit_type", "panzer")
@@ -464,6 +503,7 @@ func spawn_unit(owner_id: int, card) -> Unit:
 			u.hp = 70; u.max_hp = 70; u.damage = 55; u.attack_speed = 4.0
 			u.is_ranged = true; u.attack_range = 200.0
 			u.target_mode = Unit.TargetMode.HIGHEST_HP; u.slow_on_hit = 1.0
+			u.set_meta("unit_type", "odstrelec")
 
 	u.base_attack_speed = u.attack_speed
 	units.append(u)

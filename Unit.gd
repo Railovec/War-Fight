@@ -66,6 +66,12 @@ var slow_on_hit: float = 0.0     # sekundy spomalenia
 var slow_timer: float = 0.0      # zostatok spomalenia
 var base_speed: float = 0.0      # uložená pôvodná rýchlosť
 
+# Burn (Fakľar)
+var burn_on_hit: bool = false    # či útočník zapáli cieľ
+var burn_timer: float = 0.0     # zostatok horenia (3s)
+var burn_damage: int = 5        # damage za tik
+var burn_tick_cooldown: float = 0.0  # cooldown medzi burn tikmi (1s)
+
 # Internal — skip targeting for saboteur/trebuchet path
 var reached_base: bool = false
 

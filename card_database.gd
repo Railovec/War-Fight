@@ -31,6 +31,16 @@ func register_cards():
 		"cost": 8, "type": "spawn", "unit_type": "mamut",
 		"speed": 0.5, "era": "stone"
 	})
+	_add({
+		"id": "spawn_faklar",
+		"cost": 7, "type": "spawn", "unit_type": "faklar",
+		"speed": 1.2, "era": "stone"
+	})
+	_add({
+		"id": "spawn_jaskynny_strelec",
+		"cost": 4, "type": "spawn", "unit_type": "jaskynny_strelec",
+		"speed": 0.0, "era": "stone"
+	})
 
 	# ══════════════════════════════════════════
 	# BRONZOVÁ DOBA

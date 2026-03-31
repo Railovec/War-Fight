@@ -19,3 +19,4 @@ config/icon="res://icon.svg"
 
 Global="*res://global.gd"
 Supabase="*res://Supabase.gd"
+SupabaseManager="*res://SupabaseManager.gd"
