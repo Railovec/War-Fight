@@ -107,6 +107,7 @@ func _on_message(text: String):
 		print("⏳ Čakám na súpera...")
 
 	elif type == "game_start":
+		$AudioStreamPlayer2D.play()
 		print("🚀 Hra začala!")
 		game_started = true
 

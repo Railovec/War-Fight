@@ -7,20 +7,50 @@ var owner_id: int = 1
 var current_hp: int = 100
 var max_hp: int = 100
 var unit_type: String = "jaskynny_muz"
+var attack_sound: AudioStreamPlayer
 
-# Konfigurácia každej jednotky
+const ATTACK_SOUNDS = {
+	"jaskynny_muz": "res://hudba/jaskynny muz.mp3",
+	"musketier":"res://hudba/musketa.mp3",
+	
+	 "mamut": "res://hudba/mamut.mp3",
+	
+
+	"faraon":"res://hudba/faraon.mp3",
+	"gladiator": "res://hudba/gladiator.mp3",
+	"faklar":"res://hudba/faklar.mp3",
+	
+
+	
+	"mnich": "res://hudba/mnich.mp3",
+	"lukostrelec": "res://hudba/lukostrelec.mp3",
+	"inzinier": "res://hudba/inzinier.mp3",
+	"dynamiter": "res://hudba/dynamiter.mp3",
+	
+
+	
+	"vojak_ww2": "res://hudba/vojakww2.mp3",
+	"bronzovy_vojak": "res://hudba/bronzovy.mp3",
+	"rytier": "res://hudba/rytier.mp3",
+	"panzer": "res://hudba/pantzer.mp3",
+	"legionar": "res://hudba/legionar.mp3",
+	"saboter": "res://hudba/saboter.mp3",
+	"parny_tank": "res://hudba/parnytank.mp3",
+	"odstrelec": "res://hudba/odstrelec.mp3",
+}
+
 const UNIT_CONFIG = {
 	"jaskynny_muz": {
 		"walk": {
 			"file": "res://Card/Card_images/jaskynny_muz_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/jaskynny_muz_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -29,14 +59,14 @@ const UNIT_CONFIG = {
 	"musketier": {
 		"walk": {
 			"file": "res://Card/Card_images/musketier_idle.png",
-			"frames": 21,   # 4 × 7
+			"frames": 21,
 			"cols": 4,
 			"rows": 6,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/musketier_attack.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -45,23 +75,23 @@ const UNIT_CONFIG = {
 	"mamut": {
 		"walk": {
 			"file": "res://Card/Card_images/mamut_walk.png",
-			"frames": 29,   # 4 × 7
-			"cols": 4,
-			"rows": 8,
-			"fps": 20
-		},
-		"attack": {
-			"file": "res://Card/Card_images/mamut_hit.png",
-			"frames": 25,   # počet skutočných framov (nie prázdnych)
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
+		"attack": {
+			"file": "res://Card/Card_images/mamut_hit.png",
+			"frames": 29,
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
 		"death": {
-			"file": "res://Card/Card_images/mamut_death.png", 
-			"frames": 29, 
-			"cols": 4, 
-			"rows": 8, 
+			"file": "res://Card/Card_images/mamut_death.png",
+			"frames": 29,
+			"cols": 4,
+			"rows": 8,
 			"fps": 20
 		},
 	},
@@ -72,14 +102,14 @@ const UNIT_CONFIG = {
 	"faraon": {
 		"walk": {
 			"file": "res://Card/Card_images/faraon_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/faraon_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -88,14 +118,14 @@ const UNIT_CONFIG = {
 	"gladiator": {
 		"walk": {
 			"file": "res://Card/Card_images/gladiator_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/gladiator_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -104,14 +134,14 @@ const UNIT_CONFIG = {
 	"faklar": {
 		"walk": {
 			"file": "res://Card/Card_images/faklar_walk.png",
-			"frames": 17,   # 4 × 7
+			"frames": 17,
 			"cols": 4,
 			"rows": 5,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/faklar_hit.png",
-			"frames": 28,   # počet skutočných framov (nie prázdnych)
+			"frames": 28,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -120,32 +150,30 @@ const UNIT_CONFIG = {
 	"jaskynny_strelec": {
 		"walk": {
 			"file": "res://Card/Card_images/jaskynny_strelec_walk.png",
-			"frames": 25,   # 4 × 7
+			"frames": 25,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/jaskynny_strelec_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
 		},
-		
-	
 	},
 	"mnich": {
 		"walk": {
 			"file": "res://Card/Card_images/mnich_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/mnich_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -154,14 +182,14 @@ const UNIT_CONFIG = {
 	"lukostrelec": {
 		"walk": {
 			"file": "res://Card/Card_images/lukostrelec_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/lukostrelec_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -170,14 +198,14 @@ const UNIT_CONFIG = {
 	"inzinier": {
 		"walk": {
 			"file": "res://Card/Card_images/inzinier_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/inzinier_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -186,14 +214,14 @@ const UNIT_CONFIG = {
 	"dynamiter": {
 		"walk": {
 			"file": "res://Card/Card_images/dynamiter_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/dynamiter_hit.png",
-			"frames": 20,   # počet skutočných framov (nie prázdnych)
+			"frames": 20,
 			"cols": 4,
 			"rows": 5,
 			"fps": 20
@@ -202,14 +230,14 @@ const UNIT_CONFIG = {
 	"lovec": {
 		"walk": {
 			"file": "res://Card/Card_images/lovec_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/lovec_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -218,14 +246,14 @@ const UNIT_CONFIG = {
 	"vojak_ww2": {
 		"walk": {
 			"file": "res://Card/Card_images/vojak_ww2_walk.png",
-			"frames": 21,   # 4 × 7
+			"frames": 21,
 			"cols": 4,
 			"rows": 6,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/vojak_ww2_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -234,14 +262,14 @@ const UNIT_CONFIG = {
 	"bronzovy_vojak": {
 		"walk": {
 			"file": "res://Card/Card_images/bronzovy_vojak_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/bronzovy_vojak_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -250,14 +278,14 @@ const UNIT_CONFIG = {
 	"rytier": {
 		"walk": {
 			"file": "res://Card/Card_images/rytier_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/rytier_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -266,14 +294,14 @@ const UNIT_CONFIG = {
 	"panzer": {
 		"walk": {
 			"file": "res://Card/Card_images/panzer_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/panzer_hit.png",
-			"frames": 21,   # počet skutočných framov (nie prázdnych)
+			"frames": 21,
 			"cols": 4,
 			"rows": 6,
 			"fps": 20
@@ -282,14 +310,14 @@ const UNIT_CONFIG = {
 	"legionar": {
 		"walk": {
 			"file": "res://Card/Card_images/legionar_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/legionar_hit.png",
-			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"frames": 29,
 			"cols": 4,
 			"rows": 8,
 			"fps": 20
@@ -298,14 +326,14 @@ const UNIT_CONFIG = {
 	"saboter": {
 		"walk": {
 			"file": "res://Card/Card_images/saboter_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/saboter_death.png",
-			"frames": 17,   # počet skutočných framov (nie prázdnych)
+			"frames": 17,
 			"cols": 4,
 			"rows": 5,
 			"fps": 20
@@ -314,28 +342,51 @@ const UNIT_CONFIG = {
 	"parny_tank": {
 		"walk": {
 			"file": "res://Card/Card_images/parny_tank_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 28,
 			"cols": 4,
 			"rows": 7,
 			"fps": 20
 		},
 		"attack": {
 			"file": "res://Card/Card_images/parny_tank_hit.png",
-			"frames": 21,   # počet skutočných framov (nie prázdnych)
+			"frames": 21,
 			"cols": 4,
 			"rows": 5,
 			"fps": 20
 		},
 	},
-
+	"odstrelec": {
+		"walk": {
+			"file": "res://Card/Card_images/odstrelec_walk.png",
+			"frames": 21,
+			"cols": 4,
+			"rows": 6,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/odstrelec_hit.png",
+			"frames": 29,
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
 }
 
 func setup(type: String):
 	unit_type = type
 	_setup_animations()
 	_setup_hp_bar()
+	_setup_attack_sound()
 	sprite.play("walk")
 	sprite.animation_finished.connect(_on_animation_finished)
+
+func _setup_attack_sound():
+	attack_sound = AudioStreamPlayer.new()
+	var path = ATTACK_SOUNDS.get(unit_type, "res://hudba/hit.ogg")
+	attack_sound.stream = load(path)
+	attack_sound.volume_db = -20
+	add_child(attack_sound)
 
 func _setup_animations():
 	var frames = SpriteFrames.new()
@@ -347,7 +398,6 @@ func _setup_animations():
 		frames.set_animation_speed(anim_name, anim["fps"])
 		frames.set_animation_loop(anim_name, anim_name == "walk")
 
-		# Skontroluj či sú framy samostatné súbory alebo jeden sheet
 		if anim.get("separate_files", false):
 			for i in anim["frames"]:
 				var path = anim["file_pattern"] % i
@@ -361,7 +411,7 @@ func _setup_animations():
 			var frame_count = 0
 			for row in range(anim["rows"]):
 				for col in range(anim["cols"]):
-					if frame_count >= anim["frames"]:  # ← zastav keď máš dosť
+					if frame_count >= anim["frames"]:
 						break
 					var atlas = AtlasTexture.new()
 					atlas.atlas = tex
@@ -378,7 +428,7 @@ func _setup_hp_bar():
 	hp_bar.min_value = 0
 	hp_bar.max_value = 100
 	hp_bar.value = 100
-	hp_bar.position = Vector2(-25, -110) 
+	hp_bar.position = Vector2(-25, -110)
 	hp_bar.size = Vector2(50, 4)
 	hp_bar.show_percentage = false
 
@@ -409,7 +459,6 @@ func update_from_snapshot(unit_data: Dictionary):
 	else:
 		sprite.flip_h = true
 
-	# Offset aby jednotky nestáli na rovnakom mieste
 	if owner_id == 1:
 		position.x = new_x - 30
 	else:
@@ -422,6 +471,8 @@ func update_from_snapshot(unit_data: Dictionary):
 	var just_fired: bool = unit_data.get("just_fired", false)
 	if just_fired and sprite.animation != "attack":
 		sprite.play("attack")
+		if attack_sound and not attack_sound.playing:
+			attack_sound.play()
 	elif not just_fired and sprite.animation == "walk":
 		sprite.play("walk")
 

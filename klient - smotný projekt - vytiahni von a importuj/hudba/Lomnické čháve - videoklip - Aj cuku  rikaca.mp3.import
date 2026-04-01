@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://crgcr4yj0ojlb"
+path="res://.godot/imported/Lomnické čháve - videoklip - Aj cuku  rikaca.mp3-5996b613ce30571d7e33947440513ec4.mp3str"
+
+[deps]
+
+source_file="res://hudba/Lomnické čháve - videoklip - Aj cuku  rikaca.mp3"
+dest_files=["res://.godot/imported/Lomnické čháve - videoklip - Aj cuku  rikaca.mp3-5996b613ce30571d7e33947440513ec4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

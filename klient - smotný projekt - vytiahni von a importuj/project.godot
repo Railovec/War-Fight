@@ -20,3 +20,7 @@ config/icon="res://icon.svg"
 Global="*res://global.gd"
 Supabase="*res://Supabase.gd"
 SupabaseManager="*res://SupabaseManager.gd"
+
+[gui]
+
+theme/custom_font="uid://gfofp8wqjb2q"

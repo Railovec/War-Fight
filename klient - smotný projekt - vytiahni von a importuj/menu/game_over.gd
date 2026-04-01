@@ -17,6 +17,7 @@ func show_result(won: bool):
 		$ContinueButton/Label.text = "Späť do menu"
 
 func _on_continue_button_pressed():
+	Global.music_player.play()
 	Global.play_click()
 	visible = false
 	if player_won:

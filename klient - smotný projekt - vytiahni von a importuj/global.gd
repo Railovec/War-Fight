@@ -21,6 +21,9 @@ var click_playerdva: AudioStreamPlayer
 
 
 
+var music_player: AudioStreamPlayer
+
+
 func play_click():
 	click_player.play()
 	
@@ -54,7 +57,7 @@ var postavy = {
 	"res://Card/Card_profile_picture/parny_tank_profile.png": true,
 	"res://Card/Card_profile_picture/odstrelec_profile.png": true,
 	"res://Card/Card_profile_picture/drak_profile.png": true,
-	"res://Card/Card_profile_picture/saman_profile.png": true,
+	"res://Card/Card_profile_picture/saman.png": true,
 	"res://Card/Card_profile_picture/balista_profile.png": true,
 	"res://Card/Card_profile_picture/trebuchet_profile.png": true,
 	
@@ -96,7 +99,7 @@ var card_image_to_id = {
 	"res://Card/Card_profile_picture/parny_tank_profile.png": "spawn_parny_tank",
 	"res://Card/Card_profile_picture/odstrelec_profile.png": "spawn_odstrelec",
 	"res://Card/Card_profile_picture/drak_profile.png": "spawn_drak",
-	"res://Card/Card_profile_picture/saman_profile.png": "spawn_saman",
+	"res://Card/Card_profile_picture/saman.png": "spawn_saman",
 	"res://Card/Card_profile_picture/trebuchet_profile.png": "spawn_trebuchet",
 	"res://Card/Card_profile_picture/balista_profile.png": "spawn_balistar",
 	
@@ -123,6 +126,14 @@ var card_costs = {
 
 
 func _ready():
+	
+	
+	music_player = AudioStreamPlayer.new()
+	music_player.stream = preload("res://hudba/zeleznadoba1.mp3")
+	music_player.volume_db = -15
+	add_child(music_player)
+	music_player.play()
+	music_player.finished.connect(func(): music_player.play())
 	# Ak je spustený ako druhá testovacia inštancia
 	if "--second" in OS.get_cmdline_args():
 		save_path = "user://save2.dat"
