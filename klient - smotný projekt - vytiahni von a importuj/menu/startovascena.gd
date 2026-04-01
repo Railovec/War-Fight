@@ -32,7 +32,7 @@ const ARENAS = [
 func _ready() -> void:
 	game_over_scene.visible = false
 	if Global.username == "":
-		$LineEdit.show()
+		$TextureRect2.show()
 	else:
 		_supabase_login()
 	
@@ -82,13 +82,13 @@ func _on_line_edit_text_submitted(new_text: String) -> void:
 		return
 
 	Global.username = name_input
-	$LineEdit.hide()
+	$TextureRect2.hide()
 	_supabase_login()
 
 
 func _supabase_login() -> void:
 	if Global.username == "":
-		$LineEdit.show()
+		$TextureRect2.show()
 		return
 
 	var player_data = await Supabase.login(Global.player_db_id, Global.username)

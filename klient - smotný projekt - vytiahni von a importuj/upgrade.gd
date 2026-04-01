@@ -12,7 +12,7 @@ var selected_card_id: String = ""
 var doc_label: RichTextLabel
 
 const ERAS = {
-	"Kamenná": ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut", "spawn_jaskynny_strekec", "spawn_faklar"],
+	"Kamenná": ["spawn_jaskynny_muz", "spawn_lovec", "spawn_saman", "spawn_mamut", "spawn_jaskynny_strelec", "spawn_faklar"],
 	"Bronzová": ["spawn_bronzovy_vojak", "spawn_vojnovy_voz", "spawn_lukostrelec", "spawn_faraon"],
 	"Železná": ["spawn_legionar", "spawn_balistar", "spawn_gladiator", "spawn_saboter"],
 	"Stredovek": ["spawn_rytier", "spawn_trebuchet", "spawn_mnich", "spawn_drak"],

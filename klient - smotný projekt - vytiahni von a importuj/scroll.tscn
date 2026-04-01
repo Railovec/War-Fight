@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://ds3o2yvj2qtgi"]
+[gd_scene load_steps=32 format=3 uid="uid://ds3o2yvj2qtgi"]
 
 [ext_resource type="Script" uid="uid://couce7812ux7d" path="res://tlacitkopredeck.gd" id="1_11rd4"]
 [ext_resource type="Texture2D" uid="uid://2hsertctfgtd" path="res://menu/BG_pattern.png" id="1_n6kl4"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://kgi2u4dd4h1c" path="res://Card/Card_profile_picture/jaskynny_muz_profile.png" id="3_aiko0"]
 [ext_resource type="Texture2D" uid="uid://ujagjhd32neo" path="res://Card/Card_profile_picture/mamut_profile.png" id="4_jjaja"]
 [ext_resource type="Texture2D" uid="uid://dvq2crw3e52eh" path="res://Card/Card_profile_picture/vojnovy_voz_profile.png" id="5_mfxja"]
+[ext_resource type="Texture2D" uid="uid://b66yy3o4fen6p" path="res://Card/Card_profile_picture/saman_profile.png" id="5_w6222"]
 [ext_resource type="Texture2D" uid="uid://dboyid4odwvbc" path="res://Card/Card_profile_picture/faraon_profile.png" id="6_11rd4"]
 [ext_resource type="Texture2D" uid="uid://d4kj3hger46lm" path="res://obrazky/pressed.webp" id="7_x0hcb"]
 [ext_resource type="Texture2D" uid="uid://dhjln6m0qtau1" path="res://obrazky/unpressed.webp" id="8_uf85w"]
@@ -17,10 +18,18 @@
 [ext_resource type="Texture2D" uid="uid://clf01bmey4di6" path="res://Card/Card_profile_picture/lukostrelec.png" id="12_o2yn8"]
 [ext_resource type="Texture2D" uid="uid://dfs87w2l25tf8" path="res://Card/Card_profile_picture/inzinier_profile.png" id="13_hd1rn"]
 [ext_resource type="Texture2D" uid="uid://dsmdoje45d371" path="res://Card/Card_profile_picture/dynamiter_profile.png" id="14_o2yn8"]
+[ext_resource type="Texture2D" uid="uid://c2tml4leulrn7" path="res://Card/Card_profile_picture/balista_profile.png" id="14_psj3m"]
 [ext_resource type="Texture2D" uid="uid://dcnip8ywxikpu" path="res://Card/Card_profile_picture/lovec_profile.png" id="15_kpvlf"]
 [ext_resource type="Texture2D" uid="uid://bljymhq4reink" path="res://Card/Card_profile_picture/vojak_ww2_profile.png" id="16_n6kl4"]
+[ext_resource type="Texture2D" uid="uid://dfkqfuny1qb6s" path="res://Card/Card_profile_picture/drak_profile.png" id="17_4x01c"]
 [ext_resource type="Texture2D" uid="uid://c1hc2362c45gh" path="res://Card/Card_profile_picture/bronzovy_vojak_profile.png" id="17_kjo21"]
+[ext_resource type="Texture2D" uid="uid://dp3bc5ypffjoa" path="res://Card/Card_profile_picture/trebuchet_profile.png" id="18_4cnt6"]
 [ext_resource type="Texture2D" uid="uid://c2ugr5d1t4t06" path="res://Card/Card_profile_picture/rytier_profile.png" id="18_kjo21"]
+[ext_resource type="Texture2D" uid="uid://b2pocb8e0ishl" path="res://Card/Card_profile_picture/panzer_profile.png" id="19_00db0"]
+[ext_resource type="Texture2D" uid="uid://cgcqvlixplv7p" path="res://Card/Card_profile_picture/legionar_profile.png" id="20_w6222"]
+[ext_resource type="Texture2D" uid="uid://dlda3hyja31ly" path="res://Card/Card_profile_picture/saboter_profile.png" id="21_uy0av"]
+[ext_resource type="Texture2D" uid="uid://j2gbcv4ap3wo" path="res://Card/Card_profile_picture/parny_tank_profile.png" id="22_v6rpl"]
+[ext_resource type="Texture2D" uid="uid://dqxlwxboiguty" path="res://Card/Card_profile_picture/odstrelec_profile.png" id="23_7ltxk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3fd8"]
 bg_color = Color(0, 0, 0, 1)
@@ -61,18 +70,18 @@ layout_mode = 1
 offset_right = 1024.0
 offset_bottom = 1024.0
 scale = Vector2(0.18, 0.18)
-texture = ExtResource("2_rlle2")
+texture = ExtResource("3_aiko0")
 
 [node name="Button2" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button2"]
+[node name="TextureRect2" type="TextureRect" parent="ScrollContainer/GridContainer/Button2"]
 layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("3_aiko0")
+texture = ExtResource("15_kpvlf")
 
 [node name="Button3" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -83,7 +92,7 @@ layout_mode = 1
 offset_right = 1024.0
 offset_bottom = 1024.0
 scale = Vector2(0.18, 0.18)
-texture = ExtResource("4_jjaja")
+texture = ExtResource("5_w6222")
 
 [node name="Button4" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -94,7 +103,7 @@ layout_mode = 1
 offset_right = 1024.0
 offset_bottom = 1024.0
 scale = Vector2(0.18, 0.18)
-texture = ExtResource("5_mfxja")
+texture = ExtResource("4_jjaja")
 
 [node name="Button5" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -103,7 +112,7 @@ layout_mode = 2
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button5"]
 layout_mode = 1
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("6_11rd4")
+texture = ExtResource("10_tf377")
 
 [node name="Button6" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -119,7 +128,7 @@ offset_bottom = 61.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("8_w7pop")
+texture = ExtResource("9_kduow")
 
 [node name="Button7" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -130,7 +139,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("9_kduow")
+texture = ExtResource("17_kjo21")
 
 [node name="Button8" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -141,7 +150,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("10_tf377")
+texture = ExtResource("5_mfxja")
 
 [node name="Button9" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -152,7 +161,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("11_hd1rn")
+texture = ExtResource("12_o2yn8")
 
 [node name="Button10" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -163,7 +172,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("12_o2yn8")
+texture = ExtResource("6_11rd4")
 
 [node name="Button11" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -174,7 +183,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("13_hd1rn")
+texture = ExtResource("20_w6222")
 
 [node name="Button12" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -185,7 +194,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("14_o2yn8")
+texture = ExtResource("14_psj3m")
 
 [node name="Button13" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -196,7 +205,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("15_kpvlf")
+texture = ExtResource("8_w7pop")
 
 [node name="Button14" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -207,7 +216,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("16_n6kl4")
+texture = ExtResource("21_uy0av")
 
 [node name="Button15" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -218,7 +227,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("17_kjo21")
+texture = ExtResource("18_kjo21")
 
 [node name="Button16" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -229,7 +238,7 @@ layout_mode = 1
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("18_kjo21")
+texture = ExtResource("18_4cnt6")
 
 [node name="Button17" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -237,11 +246,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button17"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("11_hd1rn")
 
 [node name="Button18" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -249,11 +257,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button18"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("17_4x01c")
 
 [node name="Button19" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -261,11 +268,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button19"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_rlle2")
 
 [node name="Button20" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -273,11 +279,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button20"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("22_v6rpl")
 
 [node name="Button21" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -285,11 +290,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button21"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("13_hd1rn")
 
 [node name="Button22" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -297,11 +301,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button22"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("14_o2yn8")
 
 [node name="Button23" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -309,11 +312,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button23"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("16_n6kl4")
 
 [node name="Button24" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -321,11 +323,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button24"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("19_00db0")
 
 [node name="Button25" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)
@@ -333,11 +334,10 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/GridContainer/Button25"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("23_7ltxk")
 
 [node name="Button26" type="Button" parent="ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(189, 189)

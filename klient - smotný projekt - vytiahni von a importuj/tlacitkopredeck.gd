@@ -2,7 +2,7 @@ extends Button
 
 @onready var node_2d = $"../../../Node2D/VBoxContainer"
 @onready var texture_rect = $TextureRect
-@onready var texture_rect2 = $"../Button2/TextureRect"
+@onready var texture_rect2 = $"../Button2/TextureRect2"
 @onready var texture_rect3 = $"../Button3/TextureRect"
 @onready var texture_rect4 = $"../Button4/TextureRect"
 @onready var texture_rect5 = $"../Button5/TextureRect"
@@ -21,6 +21,16 @@ extends Button
 @onready var texture_rect18= $"../Button18/TextureRect"
 @onready var texture_rect19= $"../Button19/TextureRect"
 @onready var texture_rect20= $"../Button20/TextureRect"
+@onready var texture_rect21= $"../Button21/TextureRect"
+@onready var texture_rect22= $"../Button22/TextureRect"
+@onready var texture_rect23= $"../Button23/TextureRect"
+@onready var texture_rect24= $"../Button24/TextureRect"
+@onready var texture_rect25= $"../Button25/TextureRect"
+#@onready var texture_rect26= $"../Button26/TextureRect"
+#@onready var texture_rect27= $"../Button20/TextureRect"
+#@onready var texture_rect28= $"../Button20/TextureRect"
+
+
 
 @onready var grid_container = $"../../GridContainer"
 
@@ -97,7 +107,18 @@ func dvojklik():
 					zz = texture_rect18.texture
 				if but == 19:
 					zz = texture_rect19.texture
-					
+				if but == 20:
+					zz = texture_rect20.texture
+				if but == 21:
+					zz = texture_rect21.texture
+				if but == 22:
+					zz = texture_rect22.texture
+				if but == 23:
+					zz = texture_rect23.texture
+				if but == 24:
+					zz = texture_rect24.texture
+				if but == 25:
+					zz = texture_rect25.texture
 				if bok20.texture == zz:
 					jeuz=true
 				if bok20.texture != null:

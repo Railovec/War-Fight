@@ -212,13 +212,13 @@ func _draw():
 
 	if players.has("base_hp_1"):
 		var hp1 = players["base_hp_1"]
-		draw_rect(Rect2(Vector2(150-40, 360), Vector2(40, 40)), Color.GREEN if hp1 > 0 else Color.RED)
-		draw_string(ThemeDB.fallback_font, Vector2(110, 355), "HP: %d" % hp1, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+		#draw_rect(Rect2(Vector2(150-40, 360), Vector2(40, 40)), Color.GREEN if hp1 > 0 else Color.RED)
+		draw_string(ThemeDB.fallback_font, Vector2(110, 300), "HP: %d" % hp1, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
 
 	if players.has("base_hp_2"):
 		var hp2 = players["base_hp_2"]
-		draw_rect(Rect2(Vector2(1002+20, 360), Vector2(40, 40)), Color.GREEN if hp2 > 0 else Color.RED)
-		draw_string(ThemeDB.fallback_font, Vector2(1022, 355), "HP: %d" % hp2, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+		#draw_rect(Rect2(Vector2(1002+20, 360), Vector2(40, 40)), Color.GREEN if hp2 > 0 else Color.RED)
+		draw_string(ThemeDB.fallback_font, Vector2(1022, 300), "HP: %d" % hp2, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
 
 
 # --- OVLÁDANIE ---

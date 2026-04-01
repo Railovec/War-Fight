@@ -27,15 +27,27 @@ const UNIT_CONFIG = {
 		},
 	},
 	"musketier": {
-		"walk": {"file": "res://Card/Card_images/musketier_idle.png", "frames": 5, "cols": 5, "rows": 1, "fps": 6},
-		"attack": {"file": "res://Card/Card_images/musketier_attack.png", "frames": 6, "cols": 3, "rows": 2, "fps": 10},
+		"walk": {
+			"file": "res://Card/Card_images/musketier_idle.png",
+			"frames": 21,   # 4 × 7
+			"cols": 4,
+			"rows": 6,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/musketier_attack.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
 	},
 	"mamut": {
 		"walk": {
 			"file": "res://Card/Card_images/mamut_walk.png",
-			"frames": 28,   # 4 × 7
+			"frames": 29,   # 4 × 7
 			"cols": 4,
-			"rows": 7,
+			"rows": 8,
 			"fps": 20
 		},
 		"attack": {
@@ -92,7 +104,7 @@ const UNIT_CONFIG = {
 	"faklar": {
 		"walk": {
 			"file": "res://Card/Card_images/faklar_walk.png",
-			"frames": 21,   # 4 × 7
+			"frames": 17,   # 4 × 7
 			"cols": 4,
 			"rows": 5,
 			"fps": 20
@@ -251,6 +263,71 @@ const UNIT_CONFIG = {
 			"fps": 20
 		},
 	},
+	"panzer": {
+		"walk": {
+			"file": "res://Card/Card_images/panzer_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/panzer_hit.png",
+			"frames": 21,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 6,
+			"fps": 20
+		},
+	},
+	"legionar": {
+		"walk": {
+			"file": "res://Card/Card_images/legionar_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/legionar_hit.png",
+			"frames": 29,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 8,
+			"fps": 20
+		},
+	},
+	"saboter": {
+		"walk": {
+			"file": "res://Card/Card_images/saboter_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/saboter_death.png",
+			"frames": 17,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 5,
+			"fps": 20
+		},
+	},
+	"parny_tank": {
+		"walk": {
+			"file": "res://Card/Card_images/parny_tank_walk.png",
+			"frames": 28,   # 4 × 7
+			"cols": 4,
+			"rows": 7,
+			"fps": 20
+		},
+		"attack": {
+			"file": "res://Card/Card_images/parny_tank_hit.png",
+			"frames": 21,   # počet skutočných framov (nie prázdnych)
+			"cols": 4,
+			"rows": 5,
+			"fps": 20
+		},
+	},
+
 }
 
 func setup(type: String):

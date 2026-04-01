@@ -48,6 +48,16 @@ var postavy = {
 	"res://Card/Card_profile_picture/vojak_ww2_profile.png": true,
 	"res://Card/Card_profile_picture/bronzovy_vojak_profile.png": true,
 	"res://Card/Card_profile_picture/rytier_profile.png": true,
+	"res://Card/Card_profile_picture/panzer_profile.png": true,
+	"res://Card/Card_profile_picture/legionar_profile.png": true,
+	"res://Card/Card_profile_picture/saboter_profile.png": true,
+	"res://Card/Card_profile_picture/parny_tank_profile.png": true,
+	"res://Card/Card_profile_picture/odstrelec_profile.png": true,
+	"res://Card/Card_profile_picture/drak_profile.png": true,
+	"res://Card/Card_profile_picture/saman_profile.png": true,
+	"res://Card/Card_profile_picture/balista_profile.png": true,
+	"res://Card/Card_profile_picture/trebuchet_profile.png": true,
+	
 	
 	
 	
@@ -71,7 +81,7 @@ var card_image_to_id = {
 	"res://Card/Card_profile_picture/faraon_profile.png": "spawn_faraon",
 	"res://Card/Card_profile_picture/gladiator_profile.png": "spawn_gladiator",
 	"res://Card/Card_profile_picture/falkar_profile.png": "spawn_faklar",
-	"res://Card/Card_profile_picture/jaskynny_strelec_profile.png": "spawn_jaskynny_strekec",
+	"res://Card/Card_profile_picture/jaskynny_strelec_profile.png": "spawn_jaskynny_strelec",
 	"res://Card/Card_profile_picture/mnich_profile.png": "spawn_mnich",
 	"res://Card/Card_profile_picture/lukostrelec.png": "spawn_lukostrelec",
 	"res://Card/Card_profile_picture/inzinier_profile.png": "spawn_inzinier",
@@ -79,7 +89,17 @@ var card_image_to_id = {
 	"res://Card/Card_profile_picture/lovec_profile.png": "spawn_lovec",
 	"res://Card/Card_profile_picture/vojak_ww2_profile.png": "spawn_vojak_ww2",
 	"res://Card/Card_profile_picture/bronzovy_vojak_profile.png": "spawn_bronzovy_vojak",
-	"res://Card/Card_profile_picture/rytier_profile.png": "spawn_rytier"
+	"res://Card/Card_profile_picture/rytier_profile.png": "spawn_rytier",
+	"res://Card/Card_profile_picture/panzer_profile.png": "spawn_panzer",
+	"res://Card/Card_profile_picture/legionar_profile.png": "spawn_legionar",
+	"res://Card/Card_profile_picture/saboter_profile.png": "spawn_saboter",
+	"res://Card/Card_profile_picture/parny_tank_profile.png": "spawn_parny_tank",
+	"res://Card/Card_profile_picture/odstrelec_profile.png": "spawn_odstrelec",
+	"res://Card/Card_profile_picture/drak_profile.png": "spawn_drak",
+	"res://Card/Card_profile_picture/saman_profile.png": "spawn_saman",
+	"res://Card/Card_profile_picture/trebuchet_profile.png": "spawn_trebuchet",
+	"res://Card/Card_profile_picture/balista_profile.png": "spawn_balistar",
+	
 	
 	
 	
