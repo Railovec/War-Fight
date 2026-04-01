@@ -93,10 +93,10 @@ func _on_message(text: String):
 		if hrac == 1:
 		# Hráč 1 má základňu vľavo
 			player_label.position = Vector2(10, 10)
-			opponent_label.position = Vector2(1050, 10)
+			opponent_label.position = Vector2(1000, 10)
 		else:
 		# Hráč 2 má základňu vpravo
-			player_label.position = Vector2(1050, 10)
+			player_label.position = Vector2(1000, 10)
 			opponent_label.position = Vector2(10, 10)
 		player_label.text = "👤 " + Global.username
 		opponent_label.text = "💀 " + opponent_name

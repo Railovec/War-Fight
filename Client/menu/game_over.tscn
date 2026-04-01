@@ -34,10 +34,12 @@ layout_mode = 2
 [node name="ResultLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 50
 
 [node name="SubtitleLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
 
 [node name="ContinueButton" type="TextureButton" parent="."]
 offset_left = 852.0
@@ -57,7 +59,7 @@ anchor_right = 1.0109489
 anchor_bottom = 0.9909092
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 20
 text = "back"
 horizontal_alignment = 1
 vertical_alignment = 1

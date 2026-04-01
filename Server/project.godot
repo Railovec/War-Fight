@@ -10,17 +10,6 @@ config_version=5
 
 [application]
 
-config/name="WAR FIGHT - client"
-run/main_scene="uid://bvneotxrwwy5l"
+config/name="Warfight - server"
+run/main_scene="uid://bpedphyxefhjh"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
-
-[autoload]
-
-Global="*res://global.gd"
-Supabase="*res://Supabase.gd"
-SupabaseManager="*res://SupabaseManager.gd"
-
-[gui]
-
-theme/custom_font="uid://gfofp8wqjb2q"

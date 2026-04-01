@@ -349,9 +349,9 @@ const UNIT_CONFIG = {
 		},
 		"attack": {
 			"file": "res://Card/Card_images/parny_tank_hit.png",
-			"frames": 21,
+			"frames": 25,
 			"cols": 4,
-			"rows": 5,
+			"rows": 6,
 			"fps": 20
 		},
 	},

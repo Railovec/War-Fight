@@ -1,0 +1,2 @@
+V priečinku sú dva súbory, server a klienti, aby ste si hru zahrali, musíte mať dvoch klientov.
+Pre nedostatok času, sme nestihli dať server online, ak vám to nebude vadiť, na hre budeme pracovať a na prezentáciu by sme radi prišli s exportovaným klientom na mobil a zároveň so serverom online.
