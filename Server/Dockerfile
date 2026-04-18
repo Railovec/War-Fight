@@ -27,9 +27,10 @@ RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
 	&& rm -rf templates godot.zip templates.tpz
 COPY . /project
 WORKDIR /project
-# Export implies import for preset; path-based main_scene in project.godot is required for headless/CI (UID refs need .godot cache).
+# Import assets (requires res:// icon + main scene); export using project-relative path. OpenGL3 + headless avoids Vulkan/DRI edge cases in CI.
 RUN rm -rf build && mkdir -p build \
-	&& godot --headless --display-driver headless --audio-driver Dummy --path /project --export-release "Linux" /project/build/server.x86_64
+	&& godot --headless --display-driver headless --audio-driver Dummy --rendering-driver opengl3 --path /project --import \
+	&& godot --headless --display-driver headless --audio-driver Dummy --rendering-driver opengl3 --path /project --export-release "Linux" build/server.x86_64
 
 # Local / CI: ship a binary produced outside Docker (e.g. GitHub Actions godot export)
 FROM debian:bookworm-slim AS runtime-standalone
