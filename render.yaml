@@ -6,7 +6,8 @@ services:
     name: warfight-server
     runtime: docker
     dockerfilePath: ./Server/Dockerfile
-    dockerContext: ./Server
+    # Repo root: Dockerfile uses COPY Server/ … (needs Server/project.godot in git)
+    dockerContext: .
     healthCheckPath: /health
     envVars:
       - key: GODOT_PORT

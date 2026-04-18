@@ -1,0 +1,4 @@
+# Server image build uses docker context = repo root (see Server/Dockerfile, render.yaml).
+.git
+.github
+Client/

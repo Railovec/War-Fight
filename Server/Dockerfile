@@ -25,15 +25,20 @@ RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
 	&& mkdir -p "/root/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}" \
 	&& mv templates/* "/root/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/" \
 	&& rm -rf templates godot.zip templates.tpz
-COPY . /project
+# Build context must be the repo root (see render.yaml dockerContext). Explicit COPY avoids empty/wrong context.
+COPY Server/ /project
 WORKDIR /project
-# Single export: --import + --rendering-driver often fails headless in Docker; export-release runs the pipeline.
-# LIBGL_ALWAYS_SOFTWARE: Mesa llvmpipe if Godot needs a GL context during export. --verbose surfaces real errors in logs.
+# Single export. LIBGL_ALWAYS_SOFTWARE: Mesa llvmpipe if Godot needs a GL context during export.
 ENV LIBGL_ALWAYS_SOFTWARE=1
-RUN set -eux \
+RUN set -eu \
+	&& echo "---- /project (expect project.godot here) ----" \
+	&& ls -la \
+	&& test -f project.godot || ( \
+		echo "Missing project.godot. Commit and push Server/project.godot, or set Docker build context to repo root." >&2; \
+		exit 1 \
+	) \
 	&& rm -rf build \
 	&& mkdir -p build \
-	&& test -f project.godot \
 	&& godot --verbose --headless --export-release "Linux" build/server.x86_64 \
 	&& test -f build/server.x86_64
 
@@ -45,7 +50,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	libstdc++6 \
 	&& rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY build/server.x86_64 /app/server
+COPY Server/build/server.x86_64 /app/server
 RUN chmod +x /app/server
 ENV PORT=9080
 EXPOSE 9080
