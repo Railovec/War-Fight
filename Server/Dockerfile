@@ -39,7 +39,7 @@ ENV PORT=9080
 EXPOSE 9080
 CMD ["/app/server", "--headless"]
 
-# Render: nginx on $PORT (HTTP /health + WebSocket proxy) → Godot on GODOT_PORT
+# Render: nginx on $PORT (HTTP /health + WebSocket proxy) → Godot on GODOT_PORT (no extra repo files required)
 FROM debian:bookworm-slim AS runtime-render
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	ca-certificates \
@@ -49,10 +49,54 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder /project/build/server.x86_64 /app/server
-COPY docker/nginx.conf.template /app/nginx.conf.template
-COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /app/server /entrypoint.sh \
-	&& rm -f /etc/nginx/sites-enabled/default
+RUN chmod +x /app/server \
+	&& rm -f /etc/nginx/sites-enabled/default \
+	&& cat > /app/nginx.conf.template <<'EOF'
+user www-data;
+worker_processes auto;
+error_log /dev/stderr warn;
+pid /tmp/nginx.pid;
+events {
+	worker_connections 1024;
+}
+http {
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+	map $http_upgrade $connection_upgrade {
+		default upgrade;
+		'' close;
+	}
+	server {
+		listen __LISTEN_PORT__;
+		location /health {
+			access_log off;
+			return 200 "ok\n";
+			add_header Content-Type text/plain;
+		}
+		location / {
+			proxy_pass http://127.0.0.1:__GODOT_PORT__;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection $connection_upgrade;
+			proxy_set_header Host $host;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header X-Forwarded-Proto $scheme;
+			proxy_read_timeout 86400;
+			proxy_send_timeout 86400;
+		}
+	}
+}
+EOF
+RUN cat > /entrypoint.sh <<'EOF'
+#!/bin/sh
+set -e
+GODOT_PORT="${GODOT_PORT:-8081}"
+LISTEN_PORT="${PORT:-10000}"
+sed -e "s/__LISTEN_PORT__/${LISTEN_PORT}/g" -e "s/__GODOT_PORT__/${GODOT_PORT}/g" /app/nginx.conf.template > /etc/nginx/nginx.conf
+env GODOT_PORT="$GODOT_PORT" /app/server --headless &
+exec nginx -g "daemon off;"
+EOF
+RUN chmod +x /entrypoint.sh
 ENV GODOT_PORT=8081
 EXPOSE 10000
 ENTRYPOINT ["/entrypoint.sh"]
