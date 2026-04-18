@@ -9,6 +9,7 @@ ARG GODOT_RELEASE
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	ca-certificates wget unzip \
+	libfontconfig1 libstdc++6 \
 	&& rm -rf /var/lib/apt/lists/*
 WORKDIR /tools
 RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
@@ -23,7 +24,8 @@ RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
 	&& rm -rf templates godot.zip templates.tpz
 COPY . /project
 WORKDIR /project
-RUN rm -rf build && mkdir -p build && godot --headless --export-release "Linux" ./build/server.x86_64
+RUN rm -rf build && mkdir -p build \
+	&& godot --headless --path /project --export-release "Linux" /project/build/server.x86_64
 
 # Local / CI: ship a binary produced outside Docker (e.g. GitHub Actions godot export)
 FROM debian:bookworm-slim AS runtime-standalone
