@@ -1,6 +1,10 @@
 extends Node2D
 
-@export var websocket_url := "ws://localhost:9080"
+## Set to "local" (ws:// dev server) or "deployed" (wss:// Render).
+const CONNECTION_ENV := "deployed"
+
+const _LOCAL_WS_URL := "ws://127.0.0.1:9080"
+const _DEPLOYED_WSS_URL := "wss://war-fight.onrender.com"
 
 @onready var btn_vojak = get_node_or_null("vojak")
 @onready var btn_rychly = get_node_or_null("rýchly vojak")
@@ -34,14 +38,27 @@ func _ready():
 	heartbeat_timer.wait_time = 0.5
 	heartbeat_timer.autostart = true
 	heartbeat_timer.timeout.connect(func():
+		socket.set_no_delay(true)
 		if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 			socket.send_text(JSON.stringify({"type": "ping"}))
 	)
 	add_child(heartbeat_timer)
 
-	socket.set_no_delay(true)
-	print("🚀 Štartujem klienta...")
-	var err := socket.connect_to_url(websocket_url, TLSOptions.client_unsafe())
+	var websocket_url: String
+	var tls: TLSOptions = null
+	match CONNECTION_ENV:
+		"local":
+			websocket_url = _LOCAL_WS_URL
+			tls = null
+		"deployed":
+			websocket_url = _DEPLOYED_WSS_URL
+			tls = TLSOptions.client()
+		_:
+			push_error("CONNECTION_ENV must be \"local\" or \"deployed\", got: %s" % CONNECTION_ENV)
+			set_process(false)
+			return
+	print("🚀 Štartujem klienta (%s → %s)..." % [CONNECTION_ENV, websocket_url])
+	var err := socket.connect_to_url(websocket_url, tls)
 	if err != OK:
 		print("❌ Chyba pripojenia")
 		set_process(false)
