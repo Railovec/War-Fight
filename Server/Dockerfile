@@ -90,7 +90,12 @@ http {
 			return 200 "ok\n";
 			add_header Content-Type text/plain;
 		}
+		# Godot only accepts WebSocket handshakes; plain GET/HEAD (probes, browsers) must not hit upstream.
 		location / {
+			if ($http_upgrade != "websocket") {
+				default_type text/plain;
+				return 200 "WebSocket endpoint — use wss:// with a WebSocket client.\n";
+			}
 			proxy_pass http://127.0.0.1:__GODOT_PORT__;
 			proxy_http_version 1.1;
 			proxy_set_header Upgrade $http_upgrade;
