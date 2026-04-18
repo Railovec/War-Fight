@@ -7,9 +7,12 @@ FROM ubuntu:22.04 AS builder
 ARG GODOT_VERSION
 ARG GODOT_RELEASE
 ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/root
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	ca-certificates wget unzip \
-	libfontconfig1 libstdc++6 \
+	libfontconfig1 libfreetype6 libstdc++6 \
+	libgl1 libglib2.0-0 libdbus-1-3 \
+	libx11-6 libxcb1 libxext6 libxinerama1 libxcursor1 libxi6 libxrandr2 \
 	&& rm -rf /var/lib/apt/lists/*
 WORKDIR /tools
 RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
@@ -24,8 +27,10 @@ RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
 	&& rm -rf templates godot.zip templates.tpz
 COPY . /project
 WORKDIR /project
+# --import: import resources then exit (see Godot CLI docs). Then export binary.
 RUN rm -rf build && mkdir -p build \
-	&& godot --headless --path /project --export-release "Linux" /project/build/server.x86_64
+	&& godot --headless --display-driver headless --audio-driver Dummy --path /project --import \
+	&& godot --headless --display-driver headless --audio-driver Dummy --path /project --export-release "Linux" /project/build/server.x86_64
 
 # Local / CI: ship a binary produced outside Docker (e.g. GitHub Actions godot export)
 FROM debian:bookworm-slim AS runtime-standalone
