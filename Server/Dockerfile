@@ -27,9 +27,8 @@ RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
 	&& rm -rf templates godot.zip templates.tpz
 COPY . /project
 WORKDIR /project
-# --import: import resources then exit (see Godot CLI docs). Then export binary.
+# Export implies import for preset; path-based main_scene in project.godot is required for headless/CI (UID refs need .godot cache).
 RUN rm -rf build && mkdir -p build \
-	&& godot --headless --display-driver headless --audio-driver Dummy --path /project --import \
 	&& godot --headless --display-driver headless --audio-driver Dummy --path /project --export-release "Linux" /project/build/server.x86_64
 
 # Local / CI: ship a binary produced outside Docker (e.g. GitHub Actions godot export)
