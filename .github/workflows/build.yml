@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+env:
+  GODOT_VERSION: "4.5"
+  GODOT_RELEASE: "stable"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot and export templates
+        run: |
+          set -euo pipefail
+          REL="${GODOT_VERSION}-${GODOT_RELEASE}"
+          wget -q "https://github.com/godotengine/godot-builds/releases/download/${REL}/Godot_v${REL}_linux.x86_64.zip" -O godot.zip
+          unzip -q godot.zip
+          chmod +x "Godot_v${REL}_linux.x86_64"
+          sudo mv "Godot_v${REL}_linux.x86_64" /usr/local/bin/godot
+          wget -q "https://github.com/godotengine/godot-builds/releases/download/${REL}/Godot_v${REL}_export_templates.tpz" -O templates.tpz
+          unzip -q templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}
+          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/
+          rm -rf templates godot.zip templates.tpz
+          godot --version
+
+      - name: Export client (Windows)
+        working-directory: Client
+        run: |
+          mkdir -p build
+          godot --headless --export-release "Windows Desktop" ./build/WarFight.exe
+
+      - name: Export server (Linux)
+        working-directory: Server
+        run: |
+          mkdir -p build
+          godot --headless --export-release "Linux" ./build/server.x86_64
+
+      - name: Build server Docker image (standalone, no nginx)
+        run: docker build --target runtime-standalone -t warfight-server:ci -f Server/Dockerfile Server
+
+      - name: Smoke test server container
+        run: |
+          set -euo pipefail
+          docker run -d --name warfight-srv-test -e PORT=8765 -p 8765:8765 warfight-server:ci
+          sleep 3
+          docker logs warfight-srv-test 2>&1 | grep -q "PORTE 8765" || { docker logs warfight-srv-test; exit 1; }
+          docker stop warfight-srv-test
+
+      - name: Upload client artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: warfight-client-windows
+          path: Client/build/WarFight.exe
+
+      - name: Upload server binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: warfight-server-linux-binary
+          path: Server/build/server.x86_64

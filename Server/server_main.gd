@@ -1,7 +1,9 @@
 extends Node
 
-const PORT := 9080
+const DEFAULT_PORT := 9080
 const TROPHY_RANGE := 150  # maximálny rozdiel trofejí pre match
+
+var port: int = DEFAULT_PORT
 
 var tcp_server := TCPServer.new()
 var peers: Dictionary = {}       # peer_id -> WebSocketPeer
@@ -17,13 +19,27 @@ var matchmaking_queue: Array = []
 @onready var battle := $BattleManager
 
 
+func _port_from_environment() -> int:
+	var g := OS.get_environment("GODOT_PORT")
+	if not g.is_empty():
+		var gv := g.to_int()
+		if gv > 0:
+			return gv
+	var s := OS.get_environment("PORT")
+	if s.is_empty():
+		return DEFAULT_PORT
+	var v := s.to_int()
+	return v if v > 0 else DEFAULT_PORT
+
+
 func _ready():
-	var err := tcp_server.listen(PORT)
+	port = _port_from_environment()
+	var err := tcp_server.listen(port)
 	if err != OK:
 		push_error("❌ Server sa nepodarilo spustiť")
 		set_process(false)
 	else:
-		print("✅ SERVER BEŽÍ NA PORTE ", PORT)
+		print("✅ SERVER BEŽÍ NA PORTE ", port)
 
 	var broadcast_timer := Timer.new()
 	broadcast_timer.wait_time = 0.2
