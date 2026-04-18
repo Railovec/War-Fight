@@ -27,10 +27,12 @@ RUN REL="${GODOT_VERSION}-${GODOT_RELEASE}" \
 	&& rm -rf templates godot.zip templates.tpz
 COPY . /project
 WORKDIR /project
-# Import assets (requires res:// icon + main scene); export using project-relative path. OpenGL3 + headless avoids Vulkan/DRI edge cases in CI.
+# Run export with cwd = project root (no --path). Godot 4.5 can error "valid project path when exporting"
+# if --path and Main::start()'s export check disagree; docs use: cd project && godot --headless --export-release ...
 RUN rm -rf build && mkdir -p build \
-	&& godot --headless --display-driver headless --audio-driver Dummy --rendering-driver opengl3 --path /project --import \
-	&& godot --headless --display-driver headless --audio-driver Dummy --rendering-driver opengl3 --path /project --export-release "Linux" build/server.x86_64
+	&& test -f project.godot \
+	&& godot --headless --rendering-driver opengl3 --import \
+	&& godot --headless --rendering-driver opengl3 --export-release "Linux" build/server.x86_64
 
 # Local / CI: ship a binary produced outside Docker (e.g. GitHub Actions godot export)
 FROM debian:bookworm-slim AS runtime-standalone
