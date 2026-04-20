@@ -1,0 +1,14 @@
+# Render Blueprint — https://render.com/docs/infrastructure-as-code
+# Create or update from this file in the Render Dashboard (Blueprints).
+
+services:
+  - type: web
+    name: warfight-server
+    runtime: docker
+    dockerfilePath: ./Server/Dockerfile
+    # Repo root: Dockerfile uses COPY Server/ … (needs Server/project.godot in git)
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: GODOT_PORT
+        value: "8081"
